@@ -101,3 +101,119 @@ if (glowCards.length && !window.matchMedia('(prefers-reduced-motion: reduce)').m
     });
   }, { passive: true });
 }
+
+// Catalog cards expand to a centered overlay on hover (desktop) / tap (touch)
+const catalogGrid = document.getElementById('catalogGrid');
+if (catalogGrid) {
+  const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'catalog-expand-backdrop';
+  document.body.appendChild(backdrop);
+
+  let activeOverlay = null;
+  let activeSource = null;
+
+  const closeActive = () => {
+    if (!activeOverlay) return;
+    const overlay = activeOverlay;
+    const source = activeSource;
+    activeOverlay = null;
+    activeSource = null;
+
+    overlay.classList.remove('is-open');
+    overlay.style.opacity = '0';
+    overlay.style.transform = 'scale(0.85)';
+    backdrop.classList.remove('is-open');
+    source.classList.remove('is-source-active');
+    source.setAttribute('aria-expanded', 'false');
+
+    window.setTimeout(() => overlay.remove(), reduceMotion ? 0 : 450);
+  };
+
+  const openCard = (cardEl) => {
+    if (activeSource === cardEl || activeOverlay) return;
+
+    const rectStart = cardEl.getBoundingClientRect();
+    const mediaEl = cardEl.querySelector('.catalog-card__media');
+    const title = cardEl.querySelector('h3').textContent;
+    const fullText = cardEl.querySelector('.catalog-card__full').textContent;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'catalog-expand-card';
+    overlay.innerHTML =
+      '<button class="catalog-expand-card__close" aria-label="Закрыть">&#10005;</button>' +
+      '<div class="catalog-expand-card__media"></div>' +
+      '<div class="catalog-expand-card__body"><h3></h3><p></p></div>';
+    overlay.querySelector('.catalog-expand-card__media').style.backgroundImage = mediaEl.style.backgroundImage;
+    overlay.querySelector('h3').textContent = title;
+    overlay.querySelector('p').textContent = fullText;
+
+    overlay.style.transition = 'none';
+    overlay.style.top = `${rectStart.top}px`;
+    overlay.style.left = `${rectStart.left}px`;
+    overlay.style.width = `${rectStart.width}px`;
+    overlay.style.height = `${rectStart.height}px`;
+    overlay.style.borderRadius = getComputedStyle(cardEl).borderRadius;
+    document.body.appendChild(overlay);
+
+    // Pre-measure the expanded height at target width, then revert (same
+    // synchronous frame, so no visual flash) before animating to it.
+    const targetWidth = Math.min(560, window.innerWidth * 0.92);
+    overlay.style.width = `${targetWidth}px`;
+    overlay.style.height = 'auto';
+    overlay.classList.add('is-open');
+    const naturalHeight = overlay.getBoundingClientRect().height;
+    const finalHeight = Math.min(naturalHeight, window.innerHeight * 0.82);
+    overlay.style.overflowY = naturalHeight > finalHeight ? 'auto' : '';
+    overlay.classList.remove('is-open');
+    overlay.style.width = `${rectStart.width}px`;
+    overlay.style.height = `${rectStart.height}px`;
+
+    const targetLeft = (window.innerWidth - targetWidth) / 2;
+    const targetTop = Math.max(16, (window.innerHeight - finalHeight) / 2);
+
+    backdrop.classList.add('is-open');
+    cardEl.classList.add('is-source-active');
+    cardEl.setAttribute('aria-expanded', 'true');
+    activeOverlay = overlay;
+    activeSource = cardEl;
+
+    requestAnimationFrame(() => {
+      overlay.style.transition = '';
+      overlay.style.top = `${targetTop}px`;
+      overlay.style.left = `${targetLeft}px`;
+      overlay.style.width = `${targetWidth}px`;
+      overlay.style.height = `${finalHeight}px`;
+      overlay.style.borderRadius = '32px';
+      overlay.classList.add('is-open');
+    });
+
+    overlay.querySelector('.catalog-expand-card__close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeActive();
+    });
+    if (hasHover && !reduceMotion) {
+      overlay.addEventListener('mouseleave', closeActive);
+    }
+  };
+
+  backdrop.addEventListener('click', closeActive);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeActive();
+  });
+
+  catalogGrid.querySelectorAll('.catalog-card').forEach((card) => {
+    card.addEventListener('click', () => openCard(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCard(card);
+      }
+    });
+    if (hasHover) {
+      card.addEventListener('mouseenter', () => openCard(card));
+    }
+  });
+}
