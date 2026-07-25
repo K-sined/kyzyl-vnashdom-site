@@ -442,12 +442,32 @@
 
     <div class="quiz-step" data-step="1">
       <h3 class="quiz-step__title" id="quizTitle1">Что вы ремонтируете?</h3>
-      <div class="quiz-options" data-group="room">
-        <label class="quiz-option"><input type="radio" name="room" value="kitchen" required><span>Кухня</span></label>
-        <label class="quiz-option"><input type="radio" name="room" value="bathroom"><span>Ванная</span></label>
-        <label class="quiz-option"><input type="radio" name="room" value="bedroom"><span>Спальня, гостиная</span></label>
-        <label class="quiz-option"><input type="radio" name="room" value="hallway"><span>Прихожая</span></label>
-        <label class="quiz-option"><input type="radio" name="room" value="whole"><span>Весь дом / несколько помещений</span></label>
+      <div class="quiz-options quiz-options--photo" data-group="room">
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="room" value="kitchen" required>
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/room-kitchen.jpg')"></span>
+          <span class="quiz-option__label">Кухня</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="room" value="bathroom">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/room-bathroom.jpg')"></span>
+          <span class="quiz-option__label">Ванная</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="room" value="bedroom">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/room-bedroom.jpg')"></span>
+          <span class="quiz-option__label">Спальня, гостиная</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="room" value="hallway">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/room-hallway.jpg')"></span>
+          <span class="quiz-option__label">Прихожая</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="room" value="whole">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/room-whole.jpg')"></span>
+          <span class="quiz-option__label">Весь дом / несколько помещений</span>
+        </label>
       </div>
       <div class="quiz-actions">
         <button type="button" class="btn btn--accent quiz-next" data-goto="2">Далее</button>
@@ -457,15 +477,47 @@
     <div class="quiz-step" data-step="2" hidden>
       <h3 class="quiz-step__title">Какие материалы нужны?</h3>
       <p class="quiz-step__hint">Отметили то, что обычно нужно для этого помещения, — можно поправить.</p>
-      <div class="quiz-options quiz-options--check" data-group="materials">
-        <label class="quiz-option"><input type="checkbox" name="materials" value="doors"><span>Двери</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="floor"><span>Напольные покрытия</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="tile"><span>Плитка</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="wallpaper"><span>Обои</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="panels"><span>Панели МДФ/ПВХ</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="paint"><span>Краска</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="glue"><span>Клеи, герметики</span></label>
-        <label class="quiz-option"><input type="checkbox" name="materials" value="curtains"><span>Гардины</span></label>
+      <div class="quiz-options quiz-options--photo quiz-options--check" data-group="materials">
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="doors">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-doors.jpg')"></span>
+          <span class="quiz-option__label">Двери</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="floor">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-floor.jpg')"></span>
+          <span class="quiz-option__label">Напольные покрытия</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="tile">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-tile.jpg')"></span>
+          <span class="quiz-option__label">Плитка</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="wallpaper">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-wallpaper.jpg')"></span>
+          <span class="quiz-option__label">Обои</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="panels">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-panels.jpg')"></span>
+          <span class="quiz-option__label">Панели МДФ/ПВХ</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="paint">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-paint.jpg')"></span>
+          <span class="quiz-option__label">Краска</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="glue">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-glue.jpg')"></span>
+          <span class="quiz-option__label">Клеи, герметики</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="checkbox" name="materials" value="curtains">
+          <span class="quiz-option__media" style="background-image:url('assets/catalog-curtains.jpg')"></span>
+          <span class="quiz-option__label">Гардины</span>
+        </label>
       </div>
       <div class="quiz-actions">
         <button type="button" class="btn btn--outline quiz-back" data-goto="1">Назад</button>
@@ -475,11 +527,27 @@
 
     <div class="quiz-step" data-step="3" hidden>
       <h3 class="quiz-step__title">Когда планируете начать ремонт?</h3>
-      <div class="quiz-options" data-group="timing">
-        <label class="quiz-option"><input type="radio" name="timing" value="now"><span>Уже начал(а), материалы нужны сейчас</span></label>
-        <label class="quiz-option"><input type="radio" name="timing" value="soon"><span>В ближайшие 2 недели</span></label>
-        <label class="quiz-option"><input type="radio" name="timing" value="month"><span>В течение месяца</span></label>
-        <label class="quiz-option"><input type="radio" name="timing" value="later"><span>Пока присматриваюсь</span></label>
+      <div class="quiz-options quiz-options--photo" data-group="timing">
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="timing" value="now">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/timing-now.jpg')"></span>
+          <span class="quiz-option__label">Уже начал(а), материалы нужны сейчас</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="timing" value="soon">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/timing-soon.jpg')"></span>
+          <span class="quiz-option__label">В ближайшие 2 недели</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="timing" value="month">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/timing-month.jpg')"></span>
+          <span class="quiz-option__label">В течение месяца</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="timing" value="later">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/timing-later.jpg')"></span>
+          <span class="quiz-option__label">Пока присматриваюсь</span>
+        </label>
       </div>
       <div class="quiz-actions">
         <button type="button" class="btn btn--outline quiz-back" data-goto="2">Назад</button>
@@ -488,12 +556,23 @@
     </div>
 
     <div class="quiz-step" data-step="4" hidden>
-      <h3 class="quiz-step__title">Какой бюджет ориентировочно закладываете?</h3>
-      <div class="quiz-options" data-group="budget">
-        <label class="quiz-option"><input type="radio" name="budget" value="under30"><span>До 30 000 ₽</span></label>
-        <label class="quiz-option"><input type="radio" name="budget" value="30to100"><span>30 000–100 000 ₽</span></label>
-        <label class="quiz-option"><input type="radio" name="budget" value="over100"><span>Более 100 000 ₽</span></label>
-        <label class="quiz-option"><input type="radio" name="budget" value="unknown"><span>Пока не считал(а)</span></label>
+      <h3 class="quiz-step__title">Нужна помощь с расчётом количества материала?</h3>
+      <div class="quiz-options quiz-options--photo" data-group="needcalc">
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="needcalc" value="help">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/calc-help.jpg')"></span>
+          <span class="quiz-option__label">Да, нужна помощь с расчётом</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="needcalc" value="known">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/calc-known.jpg')"></span>
+          <span class="quiz-option__label">Уже знаю точные размеры</span>
+        </label>
+        <label class="quiz-option quiz-option--photo">
+          <input type="radio" name="needcalc" value="unsure">
+          <span class="quiz-option__media" style="background-image:url('assets/quiz/calc-unsure.jpg')"></span>
+          <span class="quiz-option__label">Пока не думал(а) — подскажите на месте</span>
+        </label>
       </div>
       <div class="quiz-actions">
         <button type="button" class="btn btn--outline quiz-back" data-goto="3">Назад</button>

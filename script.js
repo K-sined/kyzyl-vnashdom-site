@@ -297,9 +297,27 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
   mapLoadObserver.observe(mapContainer);
 }
 
+// Google Sheets webhook for quiz leads (name, phone, answers) — a Google Apps
+// Script Web App deployed from the store's own Google account, since GitHub
+// Pages has no backend. Deploy steps:
+//   1. sheets.new → Extensions → Apps Script, paste:
+//        function doPost(e) {
+//          const row = JSON.parse(e.postData.contents);
+//          SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().appendRow([
+//            new Date(), row.name, row.phone, row.room, row.materials, row.timing, row.needCalc,
+//          ]);
+//          return ContentService.createTextOutput('ok');
+//        }
+//   2. Deploy → New deployment → type "Web app" → Execute as "Me",
+//      Who has access "Anyone" → Deploy, authorize, copy the /exec URL.
+//   3. Paste that URL below. Until it's set, the quiz still works — it just
+//      skips the Sheets write and only opens Telegram.
+const GOOGLE_SHEETS_QUIZ_WEBHOOK = '';
+
 // Hero "Подобрать материалы" quiz — a short guided flow (room → materials →
-// timing → budget → contact) that ends the same way the callback form does:
-// pre-filled Telegram message, since there's no backend on a static site.
+// timing → needs-calc → contact) that logs the lead to Google Sheets (see
+// webhook above) and ends the same way the callback form does: pre-filled
+// Telegram message, since there's no backend on a static site.
 const quizOpenBtn = document.getElementById('quizOpenBtn');
 if (quizOpenBtn) {
   const backdrop = document.getElementById('quizBackdrop');
@@ -342,14 +360,13 @@ if (quizOpenBtn) {
     month: 'в течение месяца',
     later: 'пока присматриваюсь',
   };
-  const BUDGET_LABELS = {
-    under30: 'до 30 000 ₽',
-    '30to100': '30 000–100 000 ₽',
-    over100: 'более 100 000 ₽',
-    unknown: 'пока не считал(а)',
+  const NEEDCALC_LABELS = {
+    help: 'да, нужна помощь с расчётом',
+    known: 'уже знаю точные размеры',
+    unsure: 'пока не думал(а) — подскажите на месте',
   };
   // Radio group each step's "Далее" gates on — checkboxes (materials) aren't required.
-  const STEP_REQUIRED_GROUP = { 1: 'room', 3: 'timing', 4: 'budget' };
+  const STEP_REQUIRED_GROUP = { 1: 'room', 3: 'timing', 4: 'needcalc' };
 
   let currentStep = 1;
 
@@ -357,16 +374,16 @@ if (quizOpenBtn) {
     const room = form.querySelector('input[name="room"]:checked');
     const materials = form.querySelectorAll('input[name="materials"]:checked');
     const timing = form.querySelector('input[name="timing"]:checked');
-    const budget = form.querySelector('input[name="budget"]:checked');
+    const needCalc = form.querySelector('input[name="needcalc"]:checked');
     const roomText = room ? ROOM_LABELS[room.value] : '—';
     const materialsText = materials.length
       ? Array.from(materials).map((el) => MATERIAL_LABELS[el.value]).join(', ')
       : '—';
     const timingText = timing ? TIMING_LABELS[timing.value] : '—';
-    const budgetText = budget ? BUDGET_LABELS[budget.value] : '—';
+    const needCalcText = needCalc ? NEEDCALC_LABELS[needCalc.value] : '—';
     return {
-      roomText, materialsText, timingText, budgetText,
-      display: `Помещение: ${roomText}. Материалы: ${materialsText}. Когда: ${timingText}. Бюджет: ${budgetText}.`,
+      roomText, materialsText, timingText, needCalcText,
+      display: `Помещение: ${roomText}. Материалы: ${materialsText}. Когда: ${timingText}. Расчёт количества: ${needCalcText}.`,
     };
   };
 
@@ -444,9 +461,24 @@ if (quizOpenBtn) {
       return;
     }
 
-    const { roomText, materialsText, timingText, budgetText } = buildSummary();
+    const { roomText, materialsText, timingText, needCalcText } = buildSummary();
 
-    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошёл(-ла) квиз на сайте: помещение — ${roomText}, нужны материалы — ${materialsText}, сроки — ${timingText}, бюджет — ${budgetText}. Прошу помочь подобрать и рассчитать количество, и учесть скидку 3% по квизу.`;
+    if (GOOGLE_SHEETS_QUIZ_WEBHOOK) {
+      // Fire-and-forget: Apps Script Web Apps don't send CORS headers back,
+      // so the response is opaque under no-cors — that's fine, we don't
+      // need to read it, only to make sure the row lands in the sheet.
+      fetch(GOOGLE_SHEETS_QUIZ_WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          name, phone,
+          room: roomText, materials: materialsText, timing: timingText, needCalc: needCalcText,
+        }),
+      }).catch(() => {});
+    }
+
+    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошёл(-ла) квиз на сайте: помещение — ${roomText}, нужны материалы — ${materialsText}, сроки — ${timingText}, расчёт количества — ${needCalcText}. Прошу помочь подобрать материалы и учесть скидку 3% по квизу.`;
     const url = `https://t.me/+79930334434?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener');
 
