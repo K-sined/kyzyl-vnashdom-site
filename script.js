@@ -1,7 +1,7 @@
 // Scroll-reveal animation with staggered entrance for card grids
 const revealEls = document.querySelectorAll('.reveal');
 
-document.querySelectorAll('.advantages__grid, .catalog__grid').forEach((grid) => {
+document.querySelectorAll('.advantages__grid, .catalog__grid, .reviews__grid').forEach((grid) => {
   Array.from(grid.children).forEach((card, i) => {
     card.style.transitionDelay = `${i * 40}ms`;
   });
