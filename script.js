@@ -260,25 +260,41 @@ const YANDEX_MAPS_API_KEY = 'ed2991cb-a0a1-45a8-a39c-59338261e975';
 const SHOP_COORDS = [51.708914, 94.458418];
 const mapContainer = document.getElementById('yandexMap');
 if (mapContainer && YANDEX_MAPS_API_KEY) {
-  const mapScript = document.createElement('script');
-  mapScript.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_MAPS_API_KEY}&lang=ru_RU`;
-  mapScript.onload = () => {
-    window.ymaps.ready(() => {
-      const map = new window.ymaps.Map('yandexMap', {
-        center: SHOP_COORDS,
-        zoom: 16,
-        controls: ['zoomControl'],
+  // Loaded lazily (only once the contacts section nears the viewport) so
+  // Yandex's third-party cookies/requests don't hit every single page view —
+  // most visitors never scroll this far.
+  let mapLoadStarted = false;
+  const loadYandexMap = () => {
+    if (mapLoadStarted) return;
+    mapLoadStarted = true;
+    const mapScript = document.createElement('script');
+    mapScript.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_MAPS_API_KEY}&lang=ru_RU`;
+    mapScript.onload = () => {
+      window.ymaps.ready(() => {
+        const map = new window.ymaps.Map('yandexMap', {
+          center: SHOP_COORDS,
+          zoom: 16,
+          controls: ['zoomControl'],
+        });
+        map.behaviors.disable('scrollZoom');
+        const placemark = new window.ymaps.Placemark(SHOP_COORDS, {
+          hintContent: 'В наш дом',
+          balloonContent: 'г. Кызыл, ул. Оюна Курседи, 54',
+        }, { preset: 'islands#redDotIcon' });
+        map.geoObjects.add(placemark);
+        mapContainer.closest('.contacts__map').classList.add('is-ready');
       });
-      map.behaviors.disable('scrollZoom');
-      const placemark = new window.ymaps.Placemark(SHOP_COORDS, {
-        hintContent: 'В наш дом',
-        balloonContent: 'г. Кызыл, ул. Оюна Курседи, 54',
-      }, { preset: 'islands#redDotIcon' });
-      map.geoObjects.add(placemark);
-      mapContainer.closest('.contacts__map').classList.add('is-ready');
-    });
+    };
+    document.head.appendChild(mapScript);
   };
-  document.head.appendChild(mapScript);
+
+  const mapLoadObserver = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      loadYandexMap();
+      mapLoadObserver.disconnect();
+    }
+  }, { rootMargin: '400px' });
+  mapLoadObserver.observe(mapContainer);
 }
 
 // "Заказать звонок" — no backend on a static site, so the request is
