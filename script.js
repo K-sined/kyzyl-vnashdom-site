@@ -114,6 +114,7 @@ if (catalogGrid) {
 
   let activeOverlay = null;
   let activeSource = null;
+  let activeSourceRect = null;
 
   const closeActive = () => {
     if (!activeOverlay) return;
@@ -121,6 +122,8 @@ if (catalogGrid) {
     const source = activeSource;
     activeOverlay = null;
     activeSource = null;
+    activeSourceRect = null;
+    document.removeEventListener('mousemove', checkHoverZone);
 
     overlay.classList.remove('is-open');
     overlay.style.opacity = '0';
@@ -130,6 +133,30 @@ if (catalogGrid) {
     source.setAttribute('aria-expanded', 'false');
 
     window.setTimeout(() => overlay.remove(), reduceMotion ? 0 : 450);
+  };
+
+  // While open, the overlay flies from the card's grid slot to the screen
+  // center — a stationary cursor is no longer "over" either the overlay or
+  // the (now hidden) card once it moves, which used to fire a spurious
+  // mouseleave and immediately reopen. Track real cursor position against
+  // both zones instead, with a small margin so it doesn't feel twitchy.
+  const margin = 24;
+  const pointInRect = (x, y, rect) =>
+    x > rect.left - margin && x < rect.right + margin &&
+    y > rect.top - margin && y < rect.bottom + margin;
+
+  let hoverCheckTicking = false;
+  const checkHoverZone = (e) => {
+    if (hoverCheckTicking || !activeOverlay) return;
+    hoverCheckTicking = true;
+    requestAnimationFrame(() => {
+      hoverCheckTicking = false;
+      if (!activeOverlay) return;
+      const overlayRect = activeOverlay.getBoundingClientRect();
+      const inSource = activeSourceRect && pointInRect(e.clientX, e.clientY, activeSourceRect);
+      const inOverlay = pointInRect(e.clientX, e.clientY, overlayRect);
+      if (!inSource && !inOverlay) closeActive();
+    });
   };
 
   const openCard = (cardEl) => {
@@ -179,6 +206,10 @@ if (catalogGrid) {
     cardEl.setAttribute('aria-expanded', 'true');
     activeOverlay = overlay;
     activeSource = cardEl;
+    activeSourceRect = rectStart;
+    if (hasHover && !reduceMotion) {
+      document.addEventListener('mousemove', checkHoverZone);
+    }
 
     requestAnimationFrame(() => {
       overlay.style.transition = '';
@@ -194,9 +225,6 @@ if (catalogGrid) {
       e.stopPropagation();
       closeActive();
     });
-    if (hasHover && !reduceMotion) {
-      overlay.addEventListener('mouseleave', closeActive);
-    }
   };
 
   backdrop.addEventListener('click', closeActive);
