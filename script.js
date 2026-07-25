@@ -297,6 +297,143 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
   mapLoadObserver.observe(mapContainer);
 }
 
+// Hero "Подобрать материалы" quiz — a short guided flow (room → materials →
+// contact) that ends the same way the callback form does: pre-filled
+// Telegram message, since there's no backend on a static site.
+const quizOpenBtn = document.getElementById('quizOpenBtn');
+if (quizOpenBtn) {
+  const backdrop = document.getElementById('quizBackdrop');
+  const modal = document.getElementById('quizModal');
+  const closeBtn = document.getElementById('quizCloseBtn');
+  const form = document.getElementById('quizForm');
+  const steps = Array.from(form.querySelectorAll('.quiz-step'));
+  const progressDots = Array.from(modal.querySelectorAll('.quiz-progress__step'));
+  const summaryEl = document.getElementById('quizSummary');
+  const noteEl = document.getElementById('quizNote');
+
+  const ROOM_LABELS = {
+    kitchen: 'кухня',
+    bathroom: 'ванная',
+    bedroom: 'спальня, гостиная',
+    hallway: 'прихожая',
+    whole: 'весь дом / несколько помещений',
+  };
+  const MATERIAL_LABELS = {
+    doors: 'двери',
+    floor: 'напольные покрытия',
+    tile: 'плитка',
+    wallpaper: 'обои',
+    panels: 'панели МДФ/ПВХ',
+    paint: 'краска',
+    glue: 'клеи, герметики',
+    curtains: 'гардины',
+  };
+  // What's typically needed per room — used to pre-check step 2, not to limit it.
+  const ROOM_MATERIALS = {
+    kitchen: ['floor', 'tile', 'panels', 'paint'],
+    bathroom: ['tile', 'floor', 'paint', 'glue'],
+    bedroom: ['floor', 'wallpaper', 'doors', 'curtains'],
+    hallway: ['floor', 'doors', 'panels'],
+    whole: Object.keys(MATERIAL_LABELS),
+  };
+
+  let currentStep = 1;
+
+  const showStep = (n) => {
+    currentStep = n;
+    steps.forEach((step) => { step.hidden = Number(step.dataset.step) !== n; });
+    progressDots.forEach((dot) => {
+      const i = Number(dot.dataset.progress);
+      dot.classList.toggle('is-active', i === n);
+      dot.classList.toggle('is-done', i < n);
+    });
+    if (n === 3) {
+      const room = form.querySelector('input[name="room"]:checked');
+      const materials = form.querySelectorAll('input[name="materials"]:checked');
+      const roomText = room ? ROOM_LABELS[room.value] : '—';
+      const materialsText = materials.length
+        ? Array.from(materials).map((el) => MATERIAL_LABELS[el.value]).join(', ')
+        : '—';
+      summaryEl.textContent = `Помещение: ${roomText}. Материалы: ${materialsText}.`;
+    }
+  };
+
+  const openQuiz = () => {
+    showStep(1);
+    form.reset();
+    noteEl.textContent = '';
+    noteEl.classList.remove('is-error', 'is-success');
+    backdrop.hidden = false;
+    modal.hidden = false;
+    requestAnimationFrame(() => {
+      backdrop.classList.add('is-open');
+      modal.classList.add('is-open');
+    });
+  };
+
+  const closeQuiz = () => {
+    backdrop.classList.remove('is-open');
+    modal.classList.remove('is-open');
+    window.setTimeout(() => { backdrop.hidden = true; modal.hidden = true; }, 300);
+  };
+
+  quizOpenBtn.addEventListener('click', openQuiz);
+  closeBtn.addEventListener('click', closeQuiz);
+  backdrop.addEventListener('click', closeQuiz);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeQuiz();
+  });
+
+  form.querySelectorAll('input[name="room"]').forEach((radio) => {
+    radio.addEventListener('change', () => {
+      const preselect = ROOM_MATERIALS[radio.value] || [];
+      form.querySelectorAll('input[name="materials"]').forEach((checkbox) => {
+        checkbox.checked = preselect.includes(checkbox.value);
+      });
+    });
+  });
+
+  form.querySelectorAll('.quiz-next').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (currentStep === 1 && !form.querySelector('input[name="room"]:checked')) {
+        return;
+      }
+      showStep(Number(btn.dataset.goto));
+    });
+  });
+  form.querySelectorAll('.quiz-back').forEach((btn) => {
+    btn.addEventListener('click', () => showStep(Number(btn.dataset.goto)));
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('quizName').value.trim();
+    const phone = document.getElementById('quizPhone').value.trim();
+    const digits = phone.replace(/\D/g, '');
+
+    noteEl.classList.remove('is-error', 'is-success');
+    if (!name || digits.length < 10) {
+      noteEl.textContent = 'Укажите имя и телефон полностью.';
+      noteEl.classList.add('is-error');
+      return;
+    }
+
+    const room = form.querySelector('input[name="room"]:checked');
+    const materials = Array.from(form.querySelectorAll('input[name="materials"]:checked'));
+    const roomText = room ? ROOM_LABELS[room.value] : 'не указано';
+    const materialsText = materials.length
+      ? materials.map((el) => MATERIAL_LABELS[el.value]).join(', ')
+      : 'не указано';
+
+    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошёл(-ла) квиз на сайте: помещение — ${roomText}, нужны материалы — ${materialsText}. Прошу помочь подобрать и рассчитать количество.`;
+    const url = `https://t.me/+79930334434?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener');
+
+    noteEl.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате.';
+    noteEl.classList.add('is-success');
+  });
+}
+
 // "Заказать звонок" — no backend on a static site, so the request is
 // delivered by opening Telegram with the message pre-filled.
 const callbackForm = document.getElementById('callbackForm');

@@ -124,7 +124,7 @@
       </div>
       <div class="hero__actions reveal">
         <a href="tel:+79930334434" class="btn btn--accent btn--lg">Позвонить: +7 (993) 033-44-34</a>
-        <a href="#contacts" class="btn btn--outline-light btn--lg">Как добраться</a>
+        <button type="button" class="btn btn--outline-light btn--lg" id="quizOpenBtn">Подобрать материалы</button>
       </div>
     </div>
   </section>
@@ -425,6 +425,71 @@
   <a class="quick-contact__btn quick-contact__btn--max" href="tel:+79930334434" aria-label="Связаться в MAX по телефону +7 993 033-44-34">
     <img src="assets/max-logo.svg" alt="" class="quick-contact__max-logo" aria-hidden="true">
   </a>
+</div>
+
+<div class="quiz-backdrop" id="quizBackdrop" hidden></div>
+<div class="quiz-modal" id="quizModal" role="dialog" aria-modal="true" aria-labelledby="quizTitle1" hidden>
+  <button type="button" class="quiz-modal__close" id="quizCloseBtn" aria-label="Закрыть">&#10005;</button>
+  <div class="quiz-progress" aria-hidden="true">
+    <span class="quiz-progress__step is-active" data-progress="1"></span>
+    <span class="quiz-progress__step" data-progress="2"></span>
+    <span class="quiz-progress__step" data-progress="3"></span>
+  </div>
+
+  <form id="quizForm" novalidate>
+
+    <div class="quiz-step" data-step="1">
+      <h3 class="quiz-step__title" id="quizTitle1">Что вы ремонтируете?</h3>
+      <div class="quiz-options" data-group="room">
+        <label class="quiz-option"><input type="radio" name="room" value="kitchen" required><span>Кухня</span></label>
+        <label class="quiz-option"><input type="radio" name="room" value="bathroom"><span>Ванная</span></label>
+        <label class="quiz-option"><input type="radio" name="room" value="bedroom"><span>Спальня, гостиная</span></label>
+        <label class="quiz-option"><input type="radio" name="room" value="hallway"><span>Прихожая</span></label>
+        <label class="quiz-option"><input type="radio" name="room" value="whole"><span>Весь дом / несколько помещений</span></label>
+      </div>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn--accent quiz-next" data-goto="2">Далее</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="2" hidden>
+      <h3 class="quiz-step__title">Какие материалы нужны?</h3>
+      <p class="quiz-step__hint">Отметили то, что обычно нужно для этого помещения, — можно поправить.</p>
+      <div class="quiz-options quiz-options--check" data-group="materials">
+        <label class="quiz-option"><input type="checkbox" name="materials" value="doors"><span>Двери</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="floor"><span>Напольные покрытия</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="tile"><span>Плитка</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="wallpaper"><span>Обои</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="panels"><span>Панели МДФ/ПВХ</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="paint"><span>Краска</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="glue"><span>Клеи, герметики</span></label>
+        <label class="quiz-option"><input type="checkbox" name="materials" value="curtains"><span>Гардины</span></label>
+      </div>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn--outline quiz-back" data-goto="1">Назад</button>
+        <button type="button" class="btn btn--accent quiz-next" data-goto="3">Далее</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="3" hidden>
+      <h3 class="quiz-step__title">Куда прислать подборку?</h3>
+      <p class="quiz-step__hint" id="quizSummary"></p>
+      <div class="quiz-form-row">
+        <label class="sr-only" for="quizName">Ваше имя</label>
+        <input class="callback-form__input" type="text" id="quizName" name="quizName" placeholder="Ваше имя" autocomplete="name" required>
+      </div>
+      <div class="quiz-form-row">
+        <label class="sr-only" for="quizPhone">Телефон</label>
+        <input class="callback-form__input" type="tel" id="quizPhone" name="quizPhone" placeholder="Телефон" autocomplete="tel" inputmode="tel" required>
+      </div>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn--outline quiz-back" data-goto="2">Назад</button>
+        <button type="submit" class="btn btn--accent">Отправить и подобрать материалы</button>
+      </div>
+      <p class="callback-form__note" id="quizNote" role="status" aria-live="polite"></p>
+    </div>
+
+  </form>
 </div>
 
 <script src="script.js"></script>
