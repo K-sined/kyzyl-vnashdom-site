@@ -362,6 +362,7 @@ section { padding: 80px 0; }
   bottom: -1px;
   left: 0;
   width: 100%;
+  z-index: 2;
   line-height: 0;
   pointer-events: none;
 }
@@ -693,7 +694,26 @@ section { padding: 80px 0; }
 
 .contacts { background: var(--cream-100); position: relative; overflow: hidden; padding-bottom: 140px; }
 
+.contacts::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/contacts-map-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(0.55) sepia(0.15) blur(1.5px) brightness(1.08);
+  opacity: 0.4;
+}
+.contacts::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--cream-100) 15%, rgba(245, 240, 225, 0.75) 55%, var(--cream-100) 100%);
+}
+
 .contacts__inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 40px;
