@@ -491,11 +491,11 @@ section { padding: 80px 0; }
 
 /* Below-the-fold card photos: warm placeholder tint until the
    IntersectionObserver in script.js swaps in the real background-image. */
-.lazy-bg { background-color: var(--cream-200); }
-.lazy-bg.is-loaded { animation: lazyBgFadeIn 0.4s ease both; }
+.lazy-bg, .lazy-quiz-bg { background-color: var(--cream-200); }
+.lazy-bg.is-loaded, .lazy-quiz-bg.is-loaded { animation: lazyBgFadeIn 0.4s ease both; }
 @keyframes lazyBgFadeIn { from { opacity: 0.4; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .lazy-bg.is-loaded { animation: none; }
+  .lazy-bg.is-loaded, .lazy-quiz-bg.is-loaded { animation: none; }
 }
 .advantage-card__media::before {
   content: "";
@@ -1298,7 +1298,11 @@ section { padding: 80px 0; }
      burger need the room — collapse the header phone button to icon-only so
      nothing gets pushed off-screen. Full number stays in the mobile-nav panel. */
   .header__phone { padding: 10px; }
-  .header__phone .phone-number, .header__phone .phone-cta { display: none; }
+  /* Visually hidden, not display:none — keeps the number in the accessible
+     name instead of relying on a separate aria-label (which, at wider
+     breakpoints where the text IS visible, caused a label/name mismatch:
+     Lighthouse best-practices "label-content-name-mismatch"). */
+  .header__phone .phone-number, .header__phone .phone-cta { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   .header__phone-icon { display: block; }
   .catalog__grid { grid-template-columns: 1fr; }
   .reviews__grid { grid-template-columns: 1fr; }

@@ -426,7 +426,24 @@ if (quizOpenBtns.length) {
     });
   };
 
+  // Quiz tile photos (room/materials/timing/needcalc — 20 images total,
+  // including 8 reused from the catalog) load only once, the first time the
+  // quiz is actually opened. Since the modal is `hidden` from page load,
+  // scroll-position-based lazy loading doesn't apply here — without this,
+  // the browser fetches all 20 backgrounds unconditionally on every visit,
+  // even for the majority who never open the quiz.
+  let quizPhotosLoaded = false;
+  const loadQuizPhotos = () => {
+    if (quizPhotosLoaded) return;
+    quizPhotosLoaded = true;
+    modal.querySelectorAll('.lazy-quiz-bg[data-bg]').forEach((el) => {
+      el.style.backgroundImage = el.dataset.bg;
+      el.classList.add('is-loaded');
+    });
+  };
+
   const openQuiz = () => {
+    loadQuizPhotos();
     showStep(1);
     form.reset();
     noteEl.textContent = '';
