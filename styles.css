@@ -302,7 +302,7 @@ h1, h2, h3 { margin: 0 0 0.5em; line-height: 1.15; }
   z-index: 2;
   position: relative;
   width: 100%;
-  max-width: 620px;
+  max-width: 720px;
   padding-left: max(24px, 6vw);
   padding-right: 24px;
 }
