@@ -246,31 +246,35 @@ if (catalogGrid) {
   });
 }
 
-// Contacts map (Yandex Maps JS API) — geocodes the shop address and drops a
-// pin. Without an API key (developer.tech.yandex.ru) this stays inactive and
-// the decorative pin placeholder shows instead, so the page never breaks.
+// Contacts map (Yandex Maps JS API) — drops a pin at the shop's coordinates.
+// Without an API key (developer.tech.yandex.ru) this stays inactive and the
+// decorative pin placeholder shows instead, so the page never breaks.
+//
+// Coordinates are hardcoded (not geocoded at runtime) because Yandex JS API
+// 2.1's geocode() uses a JSONP request that Chrome's Opaque Response
+// Blocking (ORB) rejects — net::ERR_BLOCKED_BY_ORB — regardless of key/
+// referer setup. Looked up once via OpenStreetMap Nominatim for
+// "г. Кызыл, ул. Оюна Курседи, 54".
 const YANDEX_MAPS_API_KEY = 'ed2991cb-a0a1-45a8-a39c-59338261e975';
+const SHOP_COORDS = [51.7092462, 94.4589544];
 const mapContainer = document.getElementById('yandexMap');
 if (mapContainer && YANDEX_MAPS_API_KEY) {
   const mapScript = document.createElement('script');
   mapScript.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_MAPS_API_KEY}&lang=ru_RU`;
   mapScript.onload = () => {
     window.ymaps.ready(() => {
-      window.ymaps.geocode('Кызыл, улица Оюна Курседи, 54').then((res) => {
-        const coords = res.geoObjects.get(0).geometry.getCoordinates();
-        const map = new window.ymaps.Map('yandexMap', {
-          center: coords,
-          zoom: 16,
-          controls: ['zoomControl'],
-        });
-        map.behaviors.disable('scrollZoom');
-        const placemark = new window.ymaps.Placemark(coords, {
-          hintContent: 'В наш дом',
-          balloonContent: 'г. Кызыл, ул. Оюна Курседи, 54',
-        }, { preset: 'islands#redDotIcon' });
-        map.geoObjects.add(placemark);
-        mapContainer.closest('.contacts__map').classList.add('is-ready');
+      const map = new window.ymaps.Map('yandexMap', {
+        center: SHOP_COORDS,
+        zoom: 16,
+        controls: ['zoomControl'],
       });
+      map.behaviors.disable('scrollZoom');
+      const placemark = new window.ymaps.Placemark(SHOP_COORDS, {
+        hintContent: 'В наш дом',
+        balloonContent: 'г. Кызыл, ул. Оюна Курседи, 54',
+      }, { preset: 'islands#redDotIcon' });
+      map.geoObjects.add(placemark);
+      mapContainer.closest('.contacts__map').classList.add('is-ready');
     });
   };
   document.head.appendChild(mapScript);
