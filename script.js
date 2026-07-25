@@ -245,3 +245,33 @@ if (catalogGrid) {
     }
   });
 }
+
+// Contacts map (Yandex Maps JS API) — geocodes the shop address and drops a
+// pin. Without an API key (developer.tech.yandex.ru) this stays inactive and
+// the decorative pin placeholder shows instead, so the page never breaks.
+const YANDEX_MAPS_API_KEY = '';
+const mapContainer = document.getElementById('yandexMap');
+if (mapContainer && YANDEX_MAPS_API_KEY) {
+  const mapScript = document.createElement('script');
+  mapScript.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_MAPS_API_KEY}&lang=ru_RU`;
+  mapScript.onload = () => {
+    window.ymaps.ready(() => {
+      window.ymaps.geocode('Кызыл, улица Оюна Курседи, 54').then((res) => {
+        const coords = res.geoObjects.get(0).geometry.getCoordinates();
+        const map = new window.ymaps.Map('yandexMap', {
+          center: coords,
+          zoom: 16,
+          controls: ['zoomControl'],
+        });
+        map.behaviors.disable('scrollZoom');
+        const placemark = new window.ymaps.Placemark(coords, {
+          hintContent: 'В наш дом',
+          balloonContent: 'г. Кызыл, ул. Оюна Курседи, 54',
+        }, { preset: 'islands#redDotIcon' });
+        map.geoObjects.add(placemark);
+        mapContainer.closest('.contacts__map').classList.add('is-ready');
+      });
+    });
+  };
+  document.head.appendChild(mapScript);
+}

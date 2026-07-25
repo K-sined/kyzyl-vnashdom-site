@@ -724,8 +724,10 @@ section { padding: 80px 0; }
 .contacts__list a:hover { color: var(--orange-500); }
 
 .contacts__map {
+  position: relative;
   height: 300px;
-  border-radius: 48% 52% 46% 54% / 54% 48% 52% 46%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   background:
     repeating-linear-gradient(45deg, rgba(155,106,63,0.12) 0 2px, transparent 2px 24px),
     linear-gradient(135deg, var(--cream-200), var(--brown-300));
@@ -733,13 +735,26 @@ section { padding: 80px 0; }
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-soft);
-  transition: border-radius 0.8s var(--ease-smooth);
+  transition: box-shadow 0.4s var(--ease-smooth);
 }
-.contacts__map:hover { border-radius: 52% 48% 54% 46% / 46% 54% 48% 52%; }
+.contacts__map:hover { box-shadow: var(--shadow-lift); }
+
+.contacts__map-embed {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.contacts__map.is-ready .contacts__map-embed { opacity: 1; }
+.contacts__map.is-ready .contacts__map-pin { opacity: 0; pointer-events: none; }
+
 .contacts__map-pin {
+  position: relative;
+  z-index: 1;
   width: 64px;
   height: 64px;
   color: var(--red-600);
+  transition: opacity 0.3s ease;
 }
 .reveal.is-visible .contacts__map-pin {
   animation: dropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
