@@ -535,11 +535,17 @@ section { padding: 80px 0; }
   height: 130px;
   position: relative;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
 }
 .catalog-card__media::before {
   content: "";
   position: absolute;
   inset: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
   transition: transform 0.6s var(--ease-smooth);
 }
 .catalog-card:hover .catalog-card__media::before { transform: scale(1.12) rotate(2deg); }
@@ -549,15 +555,6 @@ section { padding: 80px 0; }
   inset: 0;
   background: rgba(0,0,0,0.05);
 }
-
-.catalog-card__media--doors::before     { background: linear-gradient(135deg, #7a4a2a, #b9773f); }
-.catalog-card__media--floor::before     { background: linear-gradient(135deg, #9c6a3f, #d9b98a); }
-.catalog-card__media--tile::before      { background: linear-gradient(135deg, #c9a97a, #6b4a30); }
-.catalog-card__media--wallpaper::before { background: linear-gradient(135deg, #e8934f, #d43b2c); }
-.catalog-card__media--panels::before    { background: linear-gradient(135deg, #6b4a30, #3a261a); }
-.catalog-card__media--paint::before     { background: linear-gradient(135deg, #f2b705, #d9772f); }
-.catalog-card__media--glue::before      { background: linear-gradient(135deg, #4a3222, #7a4a2a); }
-.catalog-card__media--curtains::before  { background: linear-gradient(135deg, #d9b98a, #9c6a3f); }
 
 .catalog-card__body { padding: 20px 22px 24px; }
 .catalog-card__body h3 { font-size: 1.05rem; color: var(--brown-950); }
