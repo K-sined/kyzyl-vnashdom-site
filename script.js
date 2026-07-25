@@ -16,7 +16,21 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-revealEls.forEach((el) => observer.observe(el));
+revealEls.forEach((el) => {
+  const rect = el.getBoundingClientRect();
+  const isAboveFold = rect.top < window.innerHeight && rect.bottom > 0;
+  if (isAboveFold) {
+    // Already in the initial viewport — skip the fade/slide-up transition
+    // instead of animating it in. Measured on mobile: the first advantage
+    // card sat "is-visible" with an 0.8s transition running, which alone
+    // accounted for ~1s of LCP render-delay for zero visual benefit (nothing
+    // to "reveal" — the user hasn't scrolled yet).
+    el.style.transition = 'none';
+    el.classList.add('is-visible');
+  } else {
+    observer.observe(el);
+  }
+});
 
 // Solid header background after scrolling past the hero overlay
 const header = document.getElementById('header');
@@ -29,11 +43,15 @@ const burger = document.getElementById('burger');
 const mobileNav = document.getElementById('mobileNav');
 
 burger.addEventListener('click', () => {
-  mobileNav.classList.toggle('open');
+  const isOpen = mobileNav.classList.toggle('open');
+  burger.setAttribute('aria-expanded', String(isOpen));
 });
 
 mobileNav.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => mobileNav.classList.remove('open'));
+  link.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  });
 });
 
 // Dock-style magnification for header nav: items scale up near the cursor

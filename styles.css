@@ -135,6 +135,7 @@ h1, h2, h3 { margin: 0 0 0.5em; line-height: 1.15; }
   padding: 12px 24px;
 }
 
+.header__logo { flex-shrink: 0; }
 .header__logo img { height: 42px; width: auto; }
 
 .header__nav {
@@ -200,11 +201,13 @@ h1, h2, h3 { margin: 0 0 0.5em; line-height: 1.15; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
   line-height: 1.1;
   padding: 10px 20px;
 }
 .header__phone .phone-number { font-size: 0.95rem; }
 .header__phone .phone-cta { font-size: 0.7rem; opacity: 0.85; font-weight: 500; }
+.header__phone-icon { display: none; width: 22px; height: 22px; }
 
 .burger {
   display: none;
@@ -568,6 +571,12 @@ section { padding: 80px 0; }
 .catalog-card__body h3 {
   font-size: 1.05rem;
   color: var(--brown-950);
+}
+/* Gold "shine" sweep — only on hover/focus, once, not a permanent ambient
+   loop (previously ran infinitely on all 8 cards from page load, which is
+   pure decoration with no cause-effect and doesn't fit a premium feel). */
+.catalog-card:hover .catalog-card__body h3,
+.catalog-card:focus-visible .catalog-card__body h3 {
   background-image: linear-gradient(
     100deg,
     var(--brown-950) 30%,
@@ -581,18 +590,19 @@ section { padding: 80px 0; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: catalogShine 4s ease-in-out infinite;
+  animation: catalogShine 0.6s ease-in-out;
 }
 .catalog-card__body p { color: var(--text-muted); font-size: 0.92rem; margin: 0; }
 .catalog-card__full { display: none; }
 
 @keyframes catalogShine {
-  0%, 15% { background-position: 100% 0; }
-  85%, 100% { background-position: -100% 0; }
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalog-card__body h3 {
+  .catalog-card:hover .catalog-card__body h3,
+  .catalog-card:focus-visible .catalog-card__body h3 {
     animation: none;
     background: none;
     -webkit-text-fill-color: currentColor;
@@ -924,6 +934,25 @@ section { padding: 80px 0; }
   border: 0;
 }
 
+.sr-only--focusable:focus {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  width: auto;
+  height: auto;
+  padding: 12px 20px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--cream-100);
+  color: var(--brown-950);
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lift);
+}
+
 /* CTA */
 
 .cta {
@@ -1226,6 +1255,12 @@ section { padding: 80px 0; }
 }
 
 @media (max-width: 480px) {
+  /* Fixed-width logo (no longer flex-shrinking, see .header__logo) plus the
+     burger need the room — collapse the header phone button to icon-only so
+     nothing gets pushed off-screen. Full number stays in the mobile-nav panel. */
+  .header__phone { padding: 10px; }
+  .header__phone .phone-number, .header__phone .phone-cta { display: none; }
+  .header__phone-icon { display: block; }
   .catalog__grid { grid-template-columns: 1fr; }
   .reviews__grid { grid-template-columns: 1fr; }
   .hero__actions { flex-direction: column; align-items: stretch; }
