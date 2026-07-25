@@ -475,7 +475,10 @@ section { padding: 80px 0; }
   .advantage-card__glow { display: none; }
 }
 
-.advantage-card:nth-child(2) { --card-tint: var(--orange-500); --card-tint-2: var(--brown-500); }
+/* --card-tint sits under the body text (135deg gradient end) — orange-500
+   there measured at 3.13:1 contrast for the paragraph text (fails WCAG AA
+   4.5:1). orange-700 keeps the same warm hue but is dark enough to pass. */
+.advantage-card:nth-child(2) { --card-tint: var(--orange-700); --card-tint-2: var(--brown-500); }
 .advantage-card:nth-child(3) { --card-tint: var(--brown-700); --card-tint-2: var(--terracotta); }
 
 .advantage-card__media {
@@ -540,7 +543,7 @@ section { padding: 80px 0; }
 .advantage-card__badge svg { width: 30px; height: 30px; }
 
 .advantage-card h3 { font-size: 1.15rem; color: #fff; }
-.advantage-card p { color: rgba(255, 255, 255, 0.82); margin: 0; }
+.advantage-card p { color: rgba(255, 255, 255, 0.9); margin: 0; }
 
 .advantage-card.reveal { transform: translateY(36px) scale(0.94); }
 .advantage-card.reveal.is-visible { transform: translateY(0) scale(1); }
