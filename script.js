@@ -351,12 +351,13 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
 // Apps Script project itself if this ever needs to be recreated.
 const GOOGLE_SHEETS_QUIZ_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyUXmwrpc8So3GobywnlGBb_ii-3j6qnuTco3t_Ta8xlVgu8Y13bHrrAwJNF9hCBtXXdQ/exec';
 
-// Hero "Подобрать материалы" quiz — a short guided flow (room → materials →
-// timing → needs-calc → contact) that logs the lead to Google Sheets (see
-// webhook above), then opens Telegram with the message pre-filled, since
-// there's no backend on a static site.
-const quizOpenBtn = document.getElementById('quizOpenBtn');
-if (quizOpenBtn) {
+// "Подобрать материалы" quiz (hero + repeated in the closing CTA section) —
+// a short guided flow (room → materials → timing → needs-calc → contact)
+// that logs the lead to Google Sheets (see webhook above), then opens
+// Telegram with the message pre-filled, since there's no backend on a
+// static site.
+const quizOpenBtns = document.querySelectorAll('.js-open-quiz');
+if (quizOpenBtns.length) {
   const backdrop = document.getElementById('quizBackdrop');
   const modal = document.getElementById('quizModal');
   const closeBtn = document.getElementById('quizCloseBtn');
@@ -444,7 +445,7 @@ if (quizOpenBtn) {
     window.setTimeout(() => { backdrop.hidden = true; modal.hidden = true; }, 300);
   };
 
-  quizOpenBtn.addEventListener('click', openQuiz);
+  quizOpenBtns.forEach((btn) => btn.addEventListener('click', openQuiz));
   closeBtn.addEventListener('click', closeQuiz);
   backdrop.addEventListener('click', closeQuiz);
   document.addEventListener('keydown', (e) => {
