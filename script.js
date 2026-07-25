@@ -249,7 +249,7 @@ if (catalogGrid) {
 // Contacts map (Yandex Maps JS API) — geocodes the shop address and drops a
 // pin. Without an API key (developer.tech.yandex.ru) this stays inactive and
 // the decorative pin placeholder shows instead, so the page never breaks.
-const YANDEX_MAPS_API_KEY = '';
+const YANDEX_MAPS_API_KEY = 'ed2991cb-a0a1-45a8-a39c-59338261e975';
 const mapContainer = document.getElementById('yandexMap');
 if (mapContainer && YANDEX_MAPS_API_KEY) {
   const mapScript = document.createElement('script');
