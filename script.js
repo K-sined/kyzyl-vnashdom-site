@@ -298,21 +298,10 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
 }
 
 // Google Sheets webhook for quiz leads (name, phone, answers) — a Google Apps
-// Script Web App deployed from the store's own Google account, since GitHub
-// Pages has no backend. Deploy steps:
-//   1. sheets.new → Extensions → Apps Script, paste:
-//        function doPost(e) {
-//          const row = JSON.parse(e.postData.contents);
-//          SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().appendRow([
-//            new Date(), row.name, row.phone, row.room, row.materials, row.timing, row.needCalc,
-//          ]);
-//          return ContentService.createTextOutput('ok');
-//        }
-//   2. Deploy → New deployment → type "Web app" → Execute as "Me",
-//      Who has access "Anyone" → Deploy, authorize, copy the /exec URL.
-//   3. Paste that URL below. Until it's set, the quiz still works — it just
-//      skips the Sheets write and only opens Telegram.
-const GOOGLE_SHEETS_QUIZ_WEBHOOK = '';
+// Script Web App deployed from the store's own Google account (sheet "Заявки
+// с квиза"), since GitHub Pages has no backend. Redeploy notes live in the
+// Apps Script project itself if this ever needs to be recreated.
+const GOOGLE_SHEETS_QUIZ_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyUXmwrpc8So3GobywnlGBb_ii-3j6qnuTco3t_Ta8xlVgu8Y13bHrrAwJNF9hCBtXXdQ/exec';
 
 // Hero "Подобрать материалы" quiz — a short guided flow (room → materials →
 // timing → needs-calc → contact) that logs the lead to Google Sheets (see
