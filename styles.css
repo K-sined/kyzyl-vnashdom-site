@@ -685,20 +685,6 @@ section { padding: 80px 0; }
 
 .reviews { background: var(--cream-100); position: relative; overflow: hidden; padding-bottom: 140px; }
 
-.reviews__aggregate {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 0 auto 40px;
-  width: fit-content;
-  color: var(--text-dark);
-}
-.reviews__aggregate:hover { color: var(--orange-700); }
-.reviews__stars { color: var(--gold-600); font-size: 1.05rem; letter-spacing: 2px; }
-.reviews__aggregate-text { font-size: 0.92rem; color: var(--text-muted); }
-.reviews__aggregate-text strong { color: var(--text-dark); font-weight: 700; }
-
 .reviews__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -751,11 +737,6 @@ section { padding: 80px 0; }
   padding-top: 14px;
 }
 .review-card__author { font-weight: 700; font-size: 0.9rem; color: var(--brown-950); }
-.review-card__source {
-  font-style: normal;
-  font-size: 0.76rem;
-  color: var(--text-muted);
-}
 
 .sr-only {
   position: absolute;
@@ -827,26 +808,67 @@ section { padding: 80px 0; }
 
 .perks {
   list-style: none;
-  margin: 28px 0 0;
+  margin: 36px 0 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 .perks__item {
+  --tint: var(--brown-800);
+  --tint-2: var(--brown-900);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px 12px 18px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: transform 0.45s var(--ease-smooth), box-shadow 0.45s var(--ease-smooth);
+}
+.perks__item::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tint), var(--tint-2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-smooth);
+}
+.perks__item:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
+.perks__item:hover::before { transform: scaleX(1); }
+
+.perks__item:nth-child(1) { --tint: var(--brown-800); --tint-2: var(--brown-900); }
+.perks__item:nth-child(2) { --tint: var(--orange-500); --tint-2: var(--brown-500); }
+.perks__item:nth-child(3) { --tint: var(--terracotta); --tint-2: var(--red-600); }
+.perks__item:nth-child(4) { --tint: var(--gold-600); --tint-2: var(--orange-500); }
+
+.perks__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #fff;
-  border-radius: 999px;
-  padding: 10px 18px 10px 12px;
-  box-shadow: var(--shadow-soft);
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--brown-950);
+  justify-content: center;
+  background: linear-gradient(135deg, var(--tint-2), var(--tint));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(43, 28, 20, 0.22);
+  transition: transform 0.5s var(--ease-spring);
 }
-.perks__item svg { width: 22px; height: 22px; color: var(--orange-500); flex-shrink: 0; }
+.perks__item:hover .perks__icon { transform: rotate(-8deg) scale(1.08); }
+.perks__icon svg { width: 26px; height: 26px; }
+
+.perks__text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brown-950);
+  text-align: center;
+  line-height: 1.35;
+}
 
 .contacts__inner {
   position: relative;
@@ -999,8 +1021,8 @@ section { padding: 80px 0; }
 .quick-contact__btn svg { width: 26px; height: 26px; }
 
 .quick-contact__btn--telegram { background: #229ed9; }
-.quick-contact__btn--max { background: linear-gradient(135deg, var(--orange-500), var(--red-600)); }
-.quick-contact__max-label { font-family: var(--font-heading); font-weight: 800; font-size: 0.72rem; letter-spacing: 0.02em; }
+.quick-contact__btn--max { background: #fff; padding: 8px; }
+.quick-contact__max-logo { width: 100%; height: 100%; border-radius: 22%; }
 
 @media (max-width: 720px) {
   .quick-contact { right: 14px; bottom: 14px; gap: 10px; }
@@ -1025,6 +1047,7 @@ section { padding: 80px 0; }
   .advantages__grid { grid-template-columns: 1fr; }
   .catalog__grid { grid-template-columns: repeat(2, 1fr); }
   .reviews__grid { grid-template-columns: repeat(2, 1fr); }
+  .perks { grid-template-columns: repeat(2, 1fr); }
   .contacts__inner { grid-template-columns: 1fr; }
   .contacts__map { order: -1; height: 200px; }
 }
