@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+/* Fonts loaded via <link preconnect> in index.html <head> — not @import,
+   which blocks rendering until the CSS itself is fetched and parsed. */
 
 :root {
   /* Warm palette refined from UI/UX Pro Max "Nature Distilled" style + Home Decoration color set,
@@ -822,6 +823,29 @@ section { padding: 80px 0; }
   margin: 0;
 }
 
+.perks {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.perks__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 18px 10px 12px;
+  box-shadow: var(--shadow-soft);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--brown-950);
+}
+.perks__item svg { width: 22px; height: 22px; color: var(--orange-500); flex-shrink: 0; }
+
 .contacts__inner {
   position: relative;
   z-index: 1;
@@ -853,6 +877,45 @@ section { padding: 80px 0; }
   font-weight: 700;
 }
 .contacts__list a:hover { color: var(--orange-700); }
+
+.callback-form {
+  margin-top: 28px;
+  padding: 22px 24px 24px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  max-width: 360px;
+}
+.callback-form__title { margin: 0 0 4px; font-size: 1.05rem; color: var(--brown-950); }
+.callback-form__hint { margin: 0 0 16px; font-size: 0.85rem; color: var(--text-muted); }
+.callback-form__row { margin-bottom: 12px; }
+.callback-form__input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--cream-200);
+  background: var(--cream-100);
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.callback-form__input::placeholder { color: var(--text-muted); }
+.callback-form__input:focus {
+  outline: none;
+  border-color: var(--orange-500);
+  background: #fff;
+}
+.callback-form__submit { width: 100%; margin-top: 4px; }
+.callback-form__note {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+  color: var(--text-muted);
+}
+.callback-form__note.is-error { color: var(--red-600); }
+.callback-form__note.is-success { color: var(--brown-950); font-weight: 600; }
 
 .contacts__map {
   position: relative;
@@ -906,6 +969,41 @@ section { padding: 80px 0; }
 .footer__logo { height: 36px; margin: 0 auto 16px; }
 .footer a:hover { color: var(--orange-400); }
 .footer__copy { font-size: 0.85rem; opacity: 0.6; margin-top: 8px; }
+
+/* Floating quick-contact buttons */
+
+.quick-contact {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick-contact__btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(20, 13, 9, 0.3);
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-smooth);
+}
+.quick-contact__btn:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 12px 26px rgba(20, 13, 9, 0.38); }
+.quick-contact__btn svg { width: 26px; height: 26px; }
+
+.quick-contact__btn--telegram { background: #229ed9; }
+.quick-contact__btn--max { background: linear-gradient(135deg, var(--orange-500), var(--red-600)); }
+.quick-contact__max-label { font-family: var(--font-heading); font-weight: 800; font-size: 0.72rem; letter-spacing: 0.02em; }
+
+@media (max-width: 720px) {
+  .quick-contact { right: 14px; bottom: 14px; gap: 10px; }
+  .quick-contact__btn { width: 48px; height: 48px; }
+}
 
 /* Reveal animation */
 

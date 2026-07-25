@@ -5,8 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>В наш дом — стройматериалы в Кызыле</title>
 <meta name="description" content="Магазин строительных материалов «В наш дом» в Кызыле: двери, напольные покрытия, плитка, обои, панели, краска, клеи и герметики, гардины.">
-<link rel="icon" href="assets/logo.png">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="business.business">
+<meta property="og:title" content="В наш дом — стройматериалы в Кызыле">
+<meta property="og:description" content="Двери, напольные покрытия, плитка, обои, панели, краска, клеи и герметики, гардины. г. Кызыл, ул. Оюна Курседи, 54.">
+<meta property="og:image" content="https://k-sined.github.io/kyzyl-vnashdom-site/assets/showroom.jpg">
+<meta property="og:url" content="https://k-sined.github.io/kyzyl-vnashdom-site/">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+
 <link rel="stylesheet" href="styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HardwareStore",
+  "name": "В наш дом",
+  "image": "https://k-sined.github.io/kyzyl-vnashdom-site/assets/showroom.jpg",
+  "url": "https://k-sined.github.io/kyzyl-vnashdom-site/",
+  "telephone": "+7-993-033-44-34",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Оюна Курседи, 54",
+    "addressLocality": "Кызыл",
+    "addressRegion": "Республика Тыва",
+    "postalCode": "667007",
+    "addressCountry": "RU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 51.708914,
+    "longitude": 94.458418
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "opens": "09:00",
+    "closes": "19:00"
+  },
+  "paymentAccepted": "Наличные, банковская карта, банковский перевод, СБП",
+  "hasMap": "https://yandex.ru/maps/-/CTf6zI6M"
+}
+</script>
 </head>
 <body>
 
@@ -289,6 +336,24 @@
       <div class="contacts__about reveal">
         <p class="contacts__about-eyebrow">О нас</p>
         <p class="contacts__about-text">«В наш дом» — магазин стройматериалов на ул. Оюна Курседи, 54 в Кызыле. Держим на складе основной ассортимент для ремонта — от входных дверей до герметиков, — чтобы не заставлять покупателя ждать заказ. Перед покупкой поможем рассчитать нужное количество материала и подберём вариант под ваш бюджет.</p>
+        <ul class="perks">
+          <li class="perks__item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="4" y="16" width="24" height="16" rx="2" stroke="currentColor" stroke-width="2.5"/><path d="M28 22H36L42 28V32H28V22Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="14" cy="36" r="4" stroke="currentColor" stroke-width="2.5"/><circle cx="34" cy="36" r="4" stroke="currentColor" stroke-width="2.5"/></svg>
+            <span>Доставка по Кызылу</span>
+          </li>
+          <li class="perks__item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M6 16L24 6L42 16V38C42 39.1 41.1 40 40 40H8C6.9 40 6 39.1 6 38V16Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 40V26H30V40" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>
+            <span>Самовывоз со склада</span>
+          </li>
+          <li class="perks__item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="5" y="11" width="38" height="26" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M5 19H43" stroke="currentColor" stroke-width="2.5"/><path d="M11 29H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>Наличные, карта, СБП</span>
+          </li>
+          <li class="perks__item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 5L41 11V22C41 32 34 39.5 24 43C14 39.5 7 32 7 22V11L24 5Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M17 23L22 28L32 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Гарантия на товар</span>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="container contacts__inner">
@@ -312,6 +377,21 @@
            href="https://yandex.ru/maps/?text=Кызыл%2C%20улица%20Оюна%20Курседи%2C%2054">
           Построить маршрут
         </a>
+
+        <form class="callback-form" id="callbackForm">
+          <h3 class="callback-form__title">Заказать звонок</h3>
+          <p class="callback-form__hint">Оставьте имя и телефон — напишем вам в Telegram и перезвоним</p>
+          <div class="callback-form__row">
+            <label class="sr-only" for="callbackName">Ваше имя</label>
+            <input class="callback-form__input" type="text" id="callbackName" name="name" placeholder="Ваше имя" autocomplete="name" required>
+          </div>
+          <div class="callback-form__row">
+            <label class="sr-only" for="callbackPhone">Телефон</label>
+            <input class="callback-form__input" type="tel" id="callbackPhone" name="phone" placeholder="Телефон" autocomplete="tel" inputmode="tel" required>
+          </div>
+          <button type="submit" class="btn btn--outline callback-form__submit">Заказать звонок</button>
+          <p class="callback-form__note" id="callbackNote" role="status" aria-live="polite"></p>
+        </form>
       </div>
       <div class="contacts__map reveal" aria-hidden="true">
         <div class="contacts__map-pin">
@@ -334,6 +414,16 @@
     <p class="footer__copy">© 2026 «В наш дом». Стройматериалы в Кызыле.</p>
   </div>
 </footer>
+
+<div class="quick-contact">
+  <a class="quick-contact__btn quick-contact__btn--telegram" href="https://t.me/+79930334434" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 3.5L2.7 10.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.7l3-14c.3-1.2-.4-1.7-1.2-1.4zM8.3 13.5l9.3-5.9c.4-.3.8-.1.5.2l-8 7.4-.3 3.4-1.5-5.1z"/></svg>
+  </a>
+  <!-- TODO: заменить href на персональную ссылку вида https://max.ru/u/<хэш> из приложения MAX (Профиль → QR-код → «Поделиться») -->
+  <a class="quick-contact__btn quick-contact__btn--max" href="tel:+79930334434" aria-label="Связаться в MAX по телефону +7 993 033-44-34">
+    <span class="quick-contact__max-label" aria-hidden="true">MAX</span>
+  </a>
+</div>
 
 <script src="script.js"></script>
 </body>

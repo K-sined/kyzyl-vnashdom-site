@@ -280,3 +280,31 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
   };
   document.head.appendChild(mapScript);
 }
+
+// "Заказать звонок" — no backend on a static site, so the request is
+// delivered by opening Telegram with the message pre-filled.
+const callbackForm = document.getElementById('callbackForm');
+if (callbackForm) {
+  const note = document.getElementById('callbackNote');
+  callbackForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('callbackName').value.trim();
+    const phone = document.getElementById('callbackPhone').value.trim();
+    const digits = phone.replace(/\D/g, '');
+
+    note.classList.remove('is-error', 'is-success');
+    if (!name || digits.length < 10) {
+      note.textContent = 'Укажите имя и телефон полностью.';
+      note.classList.add('is-error');
+      return;
+    }
+
+    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошу перезвонить по вопросу стройматериалов.`;
+    const url = `https://t.me/+79930334434?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener');
+
+    note.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате.';
+    note.classList.add('is-success');
+    callbackForm.reset();
+  });
+}
