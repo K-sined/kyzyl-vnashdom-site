@@ -415,25 +415,31 @@ section { padding: 80px 0; }
   initial-value: 0;
 }
 
+.advantage-card.glow-active {
+  box-shadow: 0 16px 36px rgba(0,0,0,0.28), 0 0 0 1px rgba(242, 183, 5, 0.2), 0 0 42px 6px rgba(217, 119, 6, 0.45);
+}
+
 .advantage-card__glow {
   position: absolute;
   inset: 0;
   z-index: 4;
   border-radius: inherit;
-  padding: 2px;
+  padding: 4px;
   background: conic-gradient(
     from calc(var(--glow-angle, 0) * 1deg),
-    transparent 0deg,
-    var(--yellow-400) 30deg,
-    var(--orange-500) 70deg,
-    var(--red-600) 110deg,
-    transparent 160deg,
-    transparent 360deg
+    var(--red-600) 0deg,
+    var(--orange-500) 45deg,
+    var(--yellow-400) 90deg,
+    var(--orange-500) 135deg,
+    var(--red-600) 180deg,
+    var(--brown-500) 270deg,
+    var(--red-600) 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
+  filter: drop-shadow(0 0 6px rgba(242, 183, 5, 0.7));
   transition: opacity 0.35s ease, --glow-angle 0.3s linear;
   pointer-events: none;
 }
