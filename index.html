@@ -434,6 +434,8 @@
     <span class="quiz-progress__step is-active" data-progress="1"></span>
     <span class="quiz-progress__step" data-progress="2"></span>
     <span class="quiz-progress__step" data-progress="3"></span>
+    <span class="quiz-progress__step" data-progress="4"></span>
+    <span class="quiz-progress__step" data-progress="5"></span>
   </div>
 
   <form id="quizForm" novalidate>
@@ -472,7 +474,36 @@
     </div>
 
     <div class="quiz-step" data-step="3" hidden>
-      <h3 class="quiz-step__title">Куда прислать подборку?</h3>
+      <h3 class="quiz-step__title">Когда планируете начать ремонт?</h3>
+      <div class="quiz-options" data-group="timing">
+        <label class="quiz-option"><input type="radio" name="timing" value="now"><span>Уже начал(а), материалы нужны сейчас</span></label>
+        <label class="quiz-option"><input type="radio" name="timing" value="soon"><span>В ближайшие 2 недели</span></label>
+        <label class="quiz-option"><input type="radio" name="timing" value="month"><span>В течение месяца</span></label>
+        <label class="quiz-option"><input type="radio" name="timing" value="later"><span>Пока присматриваюсь</span></label>
+      </div>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn--outline quiz-back" data-goto="2">Назад</button>
+        <button type="button" class="btn btn--accent quiz-next" data-goto="4">Далее</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="4" hidden>
+      <h3 class="quiz-step__title">Какой бюджет ориентировочно закладываете?</h3>
+      <div class="quiz-options" data-group="budget">
+        <label class="quiz-option"><input type="radio" name="budget" value="under30"><span>До 30 000 ₽</span></label>
+        <label class="quiz-option"><input type="radio" name="budget" value="30to100"><span>30 000–100 000 ₽</span></label>
+        <label class="quiz-option"><input type="radio" name="budget" value="over100"><span>Более 100 000 ₽</span></label>
+        <label class="quiz-option"><input type="radio" name="budget" value="unknown"><span>Пока не считал(а)</span></label>
+      </div>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn--outline quiz-back" data-goto="3">Назад</button>
+        <button type="button" class="btn btn--accent quiz-next" data-goto="5">Далее</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="5" hidden>
+      <h3 class="quiz-step__title">Спасибо за ответы!</h3>
+      <p class="quiz-step__hint">Оставьте контакты — мы не будем звонить, а просто напишем в мессенджере с подборкой материалов под ваш ремонт. Оставите контакты в течение 2 дней — дадим скидку 3% на первую покупку по этой подборке.</p>
       <p class="quiz-step__hint" id="quizSummary"></p>
       <div class="quiz-form-row">
         <label class="sr-only" for="quizName">Ваше имя</label>
@@ -483,8 +514,8 @@
         <input class="callback-form__input" type="tel" id="quizPhone" name="quizPhone" placeholder="Телефон" autocomplete="tel" inputmode="tel" required>
       </div>
       <div class="quiz-actions">
-        <button type="button" class="btn btn--outline quiz-back" data-goto="2">Назад</button>
-        <button type="submit" class="btn btn--accent">Отправить и подобрать материалы</button>
+        <button type="button" class="btn btn--outline quiz-back" data-goto="4">Назад</button>
+        <button type="submit" class="btn btn--accent">Отправить и получить скидку 3%</button>
       </div>
       <p class="callback-form__note" id="quizNote" role="status" aria-live="polite"></p>
     </div>

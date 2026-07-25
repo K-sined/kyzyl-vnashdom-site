@@ -298,8 +298,8 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
 }
 
 // Hero "Подобрать материалы" quiz — a short guided flow (room → materials →
-// contact) that ends the same way the callback form does: pre-filled
-// Telegram message, since there's no backend on a static site.
+// timing → budget → contact) that ends the same way the callback form does:
+// pre-filled Telegram message, since there's no backend on a static site.
 const quizOpenBtn = document.getElementById('quizOpenBtn');
 if (quizOpenBtn) {
   const backdrop = document.getElementById('quizBackdrop');
@@ -336,8 +336,39 @@ if (quizOpenBtn) {
     hallway: ['floor', 'doors', 'panels'],
     whole: Object.keys(MATERIAL_LABELS),
   };
+  const TIMING_LABELS = {
+    now: 'уже начал(а), материалы нужны сейчас',
+    soon: 'в ближайшие 2 недели',
+    month: 'в течение месяца',
+    later: 'пока присматриваюсь',
+  };
+  const BUDGET_LABELS = {
+    under30: 'до 30 000 ₽',
+    '30to100': '30 000–100 000 ₽',
+    over100: 'более 100 000 ₽',
+    unknown: 'пока не считал(а)',
+  };
+  // Radio group each step's "Далее" gates on — checkboxes (materials) aren't required.
+  const STEP_REQUIRED_GROUP = { 1: 'room', 3: 'timing', 4: 'budget' };
 
   let currentStep = 1;
+
+  const buildSummary = () => {
+    const room = form.querySelector('input[name="room"]:checked');
+    const materials = form.querySelectorAll('input[name="materials"]:checked');
+    const timing = form.querySelector('input[name="timing"]:checked');
+    const budget = form.querySelector('input[name="budget"]:checked');
+    const roomText = room ? ROOM_LABELS[room.value] : '—';
+    const materialsText = materials.length
+      ? Array.from(materials).map((el) => MATERIAL_LABELS[el.value]).join(', ')
+      : '—';
+    const timingText = timing ? TIMING_LABELS[timing.value] : '—';
+    const budgetText = budget ? BUDGET_LABELS[budget.value] : '—';
+    return {
+      roomText, materialsText, timingText, budgetText,
+      display: `Помещение: ${roomText}. Материалы: ${materialsText}. Когда: ${timingText}. Бюджет: ${budgetText}.`,
+    };
+  };
 
   const showStep = (n) => {
     currentStep = n;
@@ -347,14 +378,8 @@ if (quizOpenBtn) {
       dot.classList.toggle('is-active', i === n);
       dot.classList.toggle('is-done', i < n);
     });
-    if (n === 3) {
-      const room = form.querySelector('input[name="room"]:checked');
-      const materials = form.querySelectorAll('input[name="materials"]:checked');
-      const roomText = room ? ROOM_LABELS[room.value] : '—';
-      const materialsText = materials.length
-        ? Array.from(materials).map((el) => MATERIAL_LABELS[el.value]).join(', ')
-        : '—';
-      summaryEl.textContent = `Помещение: ${roomText}. Материалы: ${materialsText}.`;
+    if (n === 5) {
+      summaryEl.textContent = buildSummary().display;
     }
   };
 
@@ -395,7 +420,8 @@ if (quizOpenBtn) {
 
   form.querySelectorAll('.quiz-next').forEach((btn) => {
     btn.addEventListener('click', () => {
-      if (currentStep === 1 && !form.querySelector('input[name="room"]:checked')) {
+      const requiredGroup = STEP_REQUIRED_GROUP[currentStep];
+      if (requiredGroup && !form.querySelector(`input[name="${requiredGroup}"]:checked`)) {
         return;
       }
       showStep(Number(btn.dataset.goto));
@@ -418,18 +444,13 @@ if (quizOpenBtn) {
       return;
     }
 
-    const room = form.querySelector('input[name="room"]:checked');
-    const materials = Array.from(form.querySelectorAll('input[name="materials"]:checked'));
-    const roomText = room ? ROOM_LABELS[room.value] : 'не указано';
-    const materialsText = materials.length
-      ? materials.map((el) => MATERIAL_LABELS[el.value]).join(', ')
-      : 'не указано';
+    const { roomText, materialsText, timingText, budgetText } = buildSummary();
 
-    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошёл(-ла) квиз на сайте: помещение — ${roomText}, нужны материалы — ${materialsText}. Прошу помочь подобрать и рассчитать количество.`;
+    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошёл(-ла) квиз на сайте: помещение — ${roomText}, нужны материалы — ${materialsText}, сроки — ${timingText}, бюджет — ${budgetText}. Прошу помочь подобрать и рассчитать количество, и учесть скидку 3% по квизу.`;
     const url = `https://t.me/+79930334434?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener');
 
-    noteEl.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате.';
+    noteEl.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате. Мы не звоним, только пишем в мессенджер.';
     noteEl.classList.add('is-success');
   });
 }
