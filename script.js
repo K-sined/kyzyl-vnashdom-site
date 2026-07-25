@@ -326,7 +326,6 @@ if (quizOpenBtn) {
   const form = document.getElementById('quizForm');
   const steps = Array.from(form.querySelectorAll('.quiz-step'));
   const progressDots = Array.from(modal.querySelectorAll('.quiz-progress__step'));
-  const summaryEl = document.getElementById('quizSummary');
   const noteEl = document.getElementById('quizNote');
 
   const ROOM_LABELS = {
@@ -345,14 +344,6 @@ if (quizOpenBtn) {
     paint: 'краска',
     glue: 'клеи, герметики',
     curtains: 'гардины',
-  };
-  // What's typically needed per room — used to pre-check step 2, not to limit it.
-  const ROOM_MATERIALS = {
-    kitchen: ['floor', 'tile', 'panels', 'paint'],
-    bathroom: ['tile', 'floor', 'paint', 'glue'],
-    bedroom: ['floor', 'wallpaper', 'doors', 'curtains'],
-    hallway: ['floor', 'doors', 'panels'],
-    whole: Object.keys(MATERIAL_LABELS),
   };
   const TIMING_LABELS = {
     now: 'уже начал(а), материалы нужны сейчас',
@@ -395,9 +386,6 @@ if (quizOpenBtn) {
       dot.classList.toggle('is-active', i === n);
       dot.classList.toggle('is-done', i < n);
     });
-    if (n === 5) {
-      summaryEl.textContent = buildSummary().display;
-    }
   };
 
   const openQuiz = () => {
@@ -424,15 +412,6 @@ if (quizOpenBtn) {
   backdrop.addEventListener('click', closeQuiz);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.hidden) closeQuiz();
-  });
-
-  form.querySelectorAll('input[name="room"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      const preselect = ROOM_MATERIALS[radio.value] || [];
-      form.querySelectorAll('input[name="materials"]').forEach((checkbox) => {
-        checkbox.checked = preselect.includes(checkbox.value);
-      });
-    });
   });
 
   form.querySelectorAll('.quiz-next').forEach((btn) => {

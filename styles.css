@@ -787,7 +787,7 @@ section { padding: 80px 0; }
 .quiz-option:not(.quiz-option--photo) input:focus-visible + span { outline: 2px solid var(--orange-700); outline-offset: 2px; }
 
 /* Photo-tile quiz options: image card + label, used by every quiz question */
-.quiz-options--photo { gap: 14px; }
+.quiz-options--photo { gap: 14px; justify-content: center; }
 .quiz-option--photo {
   display: flex;
   flex-direction: column;
