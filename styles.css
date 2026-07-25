@@ -149,6 +149,51 @@ h1, h2, h3 { margin: 0 0 0.5em; line-height: 1.15; }
 .header--scrolled .header__nav { color: var(--brown-800); text-shadow: none; }
 .header--scrolled .header__nav a:hover { color: var(--orange-500); }
 
+/* Dock-style nav: pills that magnify toward the cursor, Apple-dock feel */
+
+.header__nav--dock {
+  align-items: flex-end;
+  gap: 6px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.header--scrolled .header__nav--dock {
+  background: rgba(43, 28, 20, 0.05);
+  border-color: rgba(43, 28, 20, 0.08);
+}
+
+.header__nav--dock a {
+  padding: 0;
+  transform-origin: bottom center;
+  transition: transform 0.25s var(--ease-spring);
+  will-change: transform;
+}
+
+.header__nav--dock a span {
+  display: block;
+  padding: 8px 18px;
+  border-radius: 999px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.header__nav--dock a:hover span,
+.header__nav--dock a:focus-visible span {
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--orange-400);
+}
+.header--scrolled .header__nav--dock a:hover span,
+.header--scrolled .header__nav--dock a:focus-visible span {
+  background: rgba(217, 119, 6, 0.1);
+  color: var(--orange-500);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__nav--dock a { transition: none; }
+}
+
 .header__phone {
   display: flex;
   flex-direction: column;

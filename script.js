@@ -35,3 +35,27 @@ burger.addEventListener('click', () => {
 mobileNav.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => mobileNav.classList.remove('open'));
 });
+
+// Dock-style magnification for header nav: items scale up near the cursor
+const dockNav = document.getElementById('headerNav');
+if (dockNav && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const dockItems = Array.from(dockNav.querySelectorAll('a'));
+  const maxScale = 1.18;
+  const influence = 90; // px, radius of magnification effect
+
+  dockNav.addEventListener('mousemove', (e) => {
+    dockItems.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      const distance = Math.abs(e.clientX - center);
+      const scale = distance < influence
+        ? 1 + (maxScale - 1) * (1 - distance / influence)
+        : 1;
+      item.style.transform = `scale(${scale})`;
+    });
+  });
+
+  dockNav.addEventListener('mouseleave', () => {
+    dockItems.forEach((item) => { item.style.transform = 'scale(1)'; });
+  });
+}
