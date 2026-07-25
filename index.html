@@ -90,11 +90,11 @@
 
   <section class="hero">
     <div class="hero__slideshow" aria-hidden="true">
-      <div class="hero__slide" style="background-image:url('assets/showroom.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('assets/showroom-doors.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('assets/showroom-wallpaper.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('assets/showroom-laminate.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('assets/showroom-quartzvinyl.jpg')"></div>
+      <div class="hero__slide hero__slide--showroom"></div>
+      <div class="hero__slide hero__slide--doors"></div>
+      <div class="hero__slide hero__slide--wallpaper"></div>
+      <div class="hero__slide hero__slide--laminate"></div>
+      <div class="hero__slide hero__slide--quartzvinyl"></div>
     </div>
     <div class="hero__inner">
       <h1 class="sr-only">В наш дом — стройматериалы в Кызыле</h1>
@@ -137,7 +137,7 @@
       <h2 class="sr-only">Наши преимущества</h2>
       <div class="advantages__grid">
         <div class="advantage-card reveal">
-          <div class="advantage-card__media" style="background-image:url('assets/advantage-assortment.jpg')"></div>
+          <div class="advantage-card__media" style="background-image: image-set(url('assets/advantage-assortment.webp') type('image/webp'), url('assets/advantage-assortment.jpg') type('image/jpeg'))"></div>
           <div class="advantage-card__body">
             <div class="advantage-card__icon">
               <span class="advantage-card__badge">
@@ -149,7 +149,7 @@
           </div>
         </div>
         <div class="advantage-card reveal">
-          <div class="advantage-card__media" style="background-image:url('assets/advantage-consulting.jpg')"></div>
+          <div class="advantage-card__media lazy-bg" data-bg="image-set(url('assets/advantage-consulting.webp') type('image/webp'), url('assets/advantage-consulting.jpg') type('image/jpeg'))"></div>
           <div class="advantage-card__body">
             <div class="advantage-card__icon">
               <span class="advantage-card__badge">
@@ -161,7 +161,7 @@
           </div>
         </div>
         <div class="advantage-card reveal">
-          <div class="advantage-card__media" style="background-image:url('assets/advantage-prices.jpg')"></div>
+          <div class="advantage-card__media lazy-bg" data-bg="image-set(url('assets/advantage-prices.webp') type('image/webp'), url('assets/advantage-prices.jpg') type('image/jpeg'))"></div>
           <div class="advantage-card__body">
             <div class="advantage-card__icon">
               <span class="advantage-card__badge">
@@ -186,7 +186,7 @@
       <div class="catalog__grid" id="catalogGrid">
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-doors.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-doors.webp') type('image/webp'), url('assets/catalog-doors.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Двери</h3>
             <p>Входные и межкомнатные двери разных стилей и размеров.</p>
@@ -195,7 +195,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-floor.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-floor.webp') type('image/webp'), url('assets/catalog-floor.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Напольные покрытия</h3>
             <p>Линолеум, ламинат, плитка ПВХ, кварцвинил, керамогранит, а также плинтуса и фурнитура.</p>
@@ -204,7 +204,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-tile.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-tile.webp') type('image/webp'), url('assets/catalog-tile.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Керамическая плитка</h3>
             <p>Плитка для ванной, кухни и других помещений.</p>
@@ -213,7 +213,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-wallpaper.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-wallpaper.webp') type('image/webp'), url('assets/catalog-wallpaper.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Обои</h3>
             <p>Большой выбор обоев под любой интерьер.</p>
@@ -222,7 +222,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-panels.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-panels.webp') type('image/webp'), url('assets/catalog-panels.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Панели МДФ и ПВХ</h3>
             <p>Отделочные панели для стен и потолков.</p>
@@ -231,7 +231,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-paint.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-paint.webp') type('image/webp'), url('assets/catalog-paint.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Краска</h3>
             <p>Краски для внутренних и наружных работ.</p>
@@ -240,7 +240,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-glue.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-glue.webp') type('image/webp'), url('assets/catalog-glue.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Клеи, герметики</h3>
             <p>Клеевые составы и герметики для любых видов работ.</p>
@@ -249,7 +249,7 @@
         </div>
 
         <div class="catalog-card reveal" tabindex="0" role="button" aria-expanded="false">
-          <div class="catalog-card__media" style="background-image:url('assets/catalog-curtains.jpg')" aria-hidden="true"></div>
+          <div class="catalog-card__media lazy-bg" data-bg="image-set(url('assets/catalog-curtains.webp') type('image/webp'), url('assets/catalog-curtains.jpg') type('image/jpeg'))" aria-hidden="true"></div>
           <div class="catalog-card__body">
             <h3>Гардины</h3>
             <p>Карнизы и гардины для штор.</p>

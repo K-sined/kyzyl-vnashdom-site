@@ -32,6 +32,33 @@ revealEls.forEach((el) => {
   }
 });
 
+// Lazy-load below-the-fold card/section photos (catalog cards, 2nd/3rd
+// advantage card, contacts background) — these don't need to compete with
+// the hero and the first (LCP) advantage photo for bandwidth on first paint.
+const lazyBgEls = document.querySelectorAll('.lazy-bg[data-bg]');
+const lazyBgObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    el.style.backgroundImage = el.dataset.bg;
+    el.classList.add('is-loaded');
+    lazyBgObserver.unobserve(el);
+  });
+}, { rootMargin: '400px' });
+lazyBgEls.forEach((el) => lazyBgObserver.observe(el));
+
+const contactsSection = document.getElementById('contacts');
+if (contactsSection) {
+  const contactsBgObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      contactsSection.classList.add('bg-loaded');
+      contactsBgObserver.unobserve(contactsSection);
+    });
+  }, { rootMargin: '400px' });
+  contactsBgObserver.observe(contactsSection);
+}
+
 // Solid header background after scrolling past the hero overlay
 const header = document.getElementById('header');
 const setHeaderState = () => header.classList.toggle('header--scrolled', window.scrollY > 40);
@@ -191,7 +218,10 @@ if (catalogGrid) {
       '<button class="catalog-expand-card__close" aria-label="Закрыть">&#10005;</button>' +
       '<div class="catalog-expand-card__media"></div>' +
       '<div class="catalog-expand-card__body"><h3></h3><p></p></div>';
-    overlay.querySelector('.catalog-expand-card__media').style.backgroundImage = mediaEl.style.backgroundImage;
+    // Fall back to data-bg in case the lazy-load observer hasn't fired yet
+    // (e.g. a very fast programmatic scroll straight to the card).
+    overlay.querySelector('.catalog-expand-card__media').style.backgroundImage =
+      mediaEl.style.backgroundImage || mediaEl.dataset.bg || '';
     overlay.querySelector('h3').textContent = title;
     overlay.querySelector('p').textContent = fullText;
 

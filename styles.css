@@ -283,6 +283,24 @@ h1, h2, h3 { margin: 0 0 0.5em; line-height: 1.15; }
   opacity: 0;
   animation: heroSlideFade 25s infinite both;
 }
+
+/* WebP with JPEG fallback via image-set(); a much smaller ~800px-wide crop
+   is swapped in under the mobile breakpoint below — desktop's 1536px
+   original is unnecessary weight on a 390px screen. */
+.hero__slide--showroom { background-image: image-set(url('assets/showroom.webp') type('image/webp'), url('assets/showroom.jpg') type('image/jpeg')); }
+.hero__slide--doors { background-image: image-set(url('assets/showroom-doors.webp') type('image/webp'), url('assets/showroom-doors.jpg') type('image/jpeg')); }
+.hero__slide--wallpaper { background-image: image-set(url('assets/showroom-wallpaper.webp') type('image/webp'), url('assets/showroom-wallpaper.jpg') type('image/jpeg')); }
+.hero__slide--laminate { background-image: image-set(url('assets/showroom-laminate.webp') type('image/webp'), url('assets/showroom-laminate.jpg') type('image/jpeg')); }
+.hero__slide--quartzvinyl { background-image: image-set(url('assets/showroom-quartzvinyl.webp') type('image/webp'), url('assets/showroom-quartzvinyl.jpg') type('image/jpeg')); }
+
+@media (max-width: 720px) {
+  .hero__slide--showroom { background-image: image-set(url('assets/showroom-mobile.webp') type('image/webp'), url('assets/showroom-mobile.jpg') type('image/jpeg')); }
+  .hero__slide--doors { background-image: image-set(url('assets/showroom-doors-mobile.webp') type('image/webp'), url('assets/showroom-doors-mobile.jpg') type('image/jpeg')); }
+  .hero__slide--wallpaper { background-image: image-set(url('assets/showroom-wallpaper-mobile.webp') type('image/webp'), url('assets/showroom-wallpaper-mobile.jpg') type('image/jpeg')); }
+  .hero__slide--laminate { background-image: image-set(url('assets/showroom-laminate-mobile.webp') type('image/webp'), url('assets/showroom-laminate-mobile.jpg') type('image/jpeg')); }
+  .hero__slide--quartzvinyl { background-image: image-set(url('assets/showroom-quartzvinyl-mobile.webp') type('image/webp'), url('assets/showroom-quartzvinyl-mobile.jpg') type('image/jpeg')); }
+}
+
 .hero__slide:nth-child(1) { animation-delay: 0s; }
 .hero__slide:nth-child(2) { animation-delay: 5s; }
 .hero__slide:nth-child(3) { animation-delay: 10s; }
@@ -466,6 +484,15 @@ section { padding: 80px 0; }
   overflow: hidden;
   background-size: cover;
   background-position: center;
+}
+
+/* Below-the-fold card photos: warm placeholder tint until the
+   IntersectionObserver in script.js swaps in the real background-image. */
+.lazy-bg { background-color: var(--cream-200); }
+.lazy-bg.is-loaded { animation: lazyBgFadeIn 0.4s ease both; }
+@keyframes lazyBgFadeIn { from { opacity: 0.4; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .lazy-bg.is-loaded { animation: none; }
 }
 .advantage-card__media::before {
   content: "";
@@ -974,11 +1001,15 @@ section { padding: 80px 0; }
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('assets/contacts-map-bg.jpg');
   background-size: cover;
   background-position: center;
   filter: grayscale(0.55) sepia(0.15) blur(1.5px) brightness(1.08);
   opacity: 0.4;
+}
+/* Loaded on demand (see lazy-bg IntersectionObserver in script.js) — this
+   section is the last on the page, no need to fetch its background eagerly. */
+.contacts.bg-loaded::before {
+  background-image: image-set(url('assets/contacts-map-bg.webp') type('image/webp'), url('assets/contacts-map-bg.jpg') type('image/jpeg'));
 }
 .contacts::after {
   content: "";
