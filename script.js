@@ -305,8 +305,8 @@ const GOOGLE_SHEETS_QUIZ_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyUX
 
 // Hero "Подобрать материалы" quiz — a short guided flow (room → materials →
 // timing → needs-calc → contact) that logs the lead to Google Sheets (see
-// webhook above) and ends the same way the callback form does: pre-filled
-// Telegram message, since there's no backend on a static site.
+// webhook above), then opens Telegram with the message pre-filled, since
+// there's no backend on a static site.
 const quizOpenBtn = document.getElementById('quizOpenBtn');
 if (quizOpenBtn) {
   const backdrop = document.getElementById('quizBackdrop');
@@ -452,33 +452,5 @@ if (quizOpenBtn) {
 
     noteEl.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате. Мы не звоним, только пишем в мессенджер.';
     noteEl.classList.add('is-success');
-  });
-}
-
-// "Заказать звонок" — no backend on a static site, so the request is
-// delivered by opening Telegram with the message pre-filled.
-const callbackForm = document.getElementById('callbackForm');
-if (callbackForm) {
-  const note = document.getElementById('callbackNote');
-  callbackForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('callbackName').value.trim();
-    const phone = document.getElementById('callbackPhone').value.trim();
-    const digits = phone.replace(/\D/g, '');
-
-    note.classList.remove('is-error', 'is-success');
-    if (!name || digits.length < 10) {
-      note.textContent = 'Укажите имя и телефон полностью.';
-      note.classList.add('is-error');
-      return;
-    }
-
-    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошу перезвонить по вопросу стройматериалов.`;
-    const url = `https://t.me/+79930334434?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener');
-
-    note.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате.';
-    note.classList.add('is-success');
-    callbackForm.reset();
   });
 }
