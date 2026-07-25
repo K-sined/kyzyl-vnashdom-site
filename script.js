@@ -59,3 +59,45 @@ if (dockNav && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     dockItems.forEach((item) => { item.style.transform = 'scale(1)'; });
   });
 }
+
+// Glowing cursor-tracking border on advantage cards
+const glowCards = Array.from(document.querySelectorAll('.advantage-card'));
+if (glowCards.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const proximity = 60; // px beyond the card edge that still lights up the glow
+
+  glowCards.forEach((card) => {
+    const glow = document.createElement('div');
+    glow.className = 'advantage-card__glow';
+    glow.setAttribute('aria-hidden', 'true');
+    card.prepend(glow);
+  });
+
+  let ticking = false;
+  const updateGlow = (mouseX, mouseY) => {
+    glowCards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const isNear =
+        mouseX > rect.left - proximity &&
+        mouseX < rect.right + proximity &&
+        mouseY > rect.top - proximity &&
+        mouseY < rect.bottom + proximity;
+
+      card.classList.toggle('glow-active', isNear);
+      if (!isNear) return;
+
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const angle = (Math.atan2(mouseY - cy, mouseX - cx) * 180) / Math.PI + 90;
+      card.style.setProperty('--glow-angle', angle);
+    });
+  };
+
+  document.addEventListener('pointermove', (e) => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      updateGlow(e.clientX, e.clientY);
+      ticking = false;
+    });
+  }, { passive: true });
+}

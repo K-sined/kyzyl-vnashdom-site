@@ -398,6 +398,7 @@ section { padding: 80px 0; }
 .advantage-card {
   --card-tint: var(--brown-900);
   --card-tint-2: var(--brown-800);
+  position: relative;
   background: linear-gradient(135deg, var(--card-tint-2), var(--card-tint));
   border-radius: 20px;
   overflow: hidden;
@@ -405,6 +406,42 @@ section { padding: 80px 0; }
   transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth);
 }
 .advantage-card:hover { transform: translateY(-8px); box-shadow: 0 16px 36px rgba(0,0,0,0.28); }
+
+/* Glowing cursor-tracking border, warm palette, no motion/react needed */
+
+@property --glow-angle {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.advantage-card__glow {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from calc(var(--glow-angle, 0) * 1deg),
+    transparent 0deg,
+    var(--yellow-400) 30deg,
+    var(--orange-500) 70deg,
+    var(--red-600) 110deg,
+    transparent 160deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease, --glow-angle 0.3s linear;
+  pointer-events: none;
+}
+.advantage-card.glow-active .advantage-card__glow { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .advantage-card__glow { display: none; }
+}
 
 .advantage-card:nth-child(2) { --card-tint: var(--orange-500); --card-tint-2: var(--brown-500); }
 .advantage-card:nth-child(3) { --card-tint: var(--brown-700); --card-tint-2: var(--terracotta); }
