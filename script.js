@@ -253,10 +253,11 @@ if (catalogGrid) {
 // Coordinates are hardcoded (not geocoded at runtime) because Yandex JS API
 // 2.1's geocode() uses a JSONP request that Chrome's Opaque Response
 // Blocking (ORB) rejects — net::ERR_BLOCKED_BY_ORB — regardless of key/
-// referer setup. Looked up once via OpenStreetMap Nominatim for
-// "г. Кызыл, ул. Оюна Курседи, 54".
+// referer setup. OSM Nominatim's address match landed on the neighboring
+// building (54В) instead of the shop's actual building (54) — these were
+// hand-tuned against Yandex's own "В наш дом" business pin on their map.
 const YANDEX_MAPS_API_KEY = 'ed2991cb-a0a1-45a8-a39c-59338261e975';
-const SHOP_COORDS = [51.7092462, 94.4589544];
+const SHOP_COORDS = [51.708914, 94.458418];
 const mapContainer = document.getElementById('yandexMap');
 if (mapContainer && YANDEX_MAPS_API_KEY) {
   const mapScript = document.createElement('script');
