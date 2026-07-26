@@ -512,11 +512,8 @@ if (quizOpenBtns.length) {
       }).catch(() => {});
     }
 
-    const text = `Здравствуйте! Меня зовут ${name}, телефон ${phone}. Прошёл(-ла) квиз на сайте: помещение — ${roomText}, нужны материалы — ${materialsText}, сроки — ${timingText}, расчёт количества — ${needCalcText}. Прошу помочь подобрать материалы и учесть скидку 3% по квизу.`;
-    const url = `https://t.me/+79930334434?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener');
-
-    noteEl.textContent = 'Открываем Telegram — отправьте готовое сообщение в чате. Мы не звоним, только пишем в мессенджер.';
+    noteEl.textContent = 'Спасибо! Заявка отправлена, мы свяжемся с вами и учтём скидку 3% по квизу.';
     noteEl.classList.add('is-success');
+    window.setTimeout(closeQuiz, 1500);
   });
 }
