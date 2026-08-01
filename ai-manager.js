@@ -5,8 +5,10 @@
 const AI_WORKER_URL = 'https://kyzyl-ai-manager.kyzyl.workers.dev/api/chat';
 
 const AI_GREETING =
-  'Здравствуйте! Я менеджер магазина «В наш дом». Отвечу на вопросы про товары, помогу подобрать материалы или пришлю каталог по интересующей группе товаров.';
+  'Здравствуйте! Я менеджер магазина «В НАШ ДОМ». Отвечу на вопросы про товары, помогу подобрать материалы или пришлю каталог по интересующей группе товаров.';
 const AI_MAX_HISTORY = 20;
+const AI_AUTO_OPEN_DELAY_MS = 5000;
+const AI_AUTO_OPEN_SESSION_KEY = 'aiManagerAutoOpened';
 
 (function initAiManager() {
   const launcher = document.getElementById('aiManagerLauncher');
@@ -59,13 +61,16 @@ const AI_MAX_HISTORY = 20;
     return bubble;
   }
 
-  function openPanel() {
+  function openPanel(auto) {
     isOpen = true;
+    sessionStorage.setItem(AI_AUTO_OPEN_SESSION_KEY, '1');
     panel.hidden = false;
     requestAnimationFrame(() => panel.classList.add('is-open'));
     if (!messagesEl.childElementCount) appendMessage('assistant', AI_GREETING);
-    input.focus();
-    if (typeof ym === 'function') ym(111045788, 'reachGoal', 'ai_manager_open');
+    // Автооткрытие не должно красть фокус/скроллить страницу под клиентом —
+    // фокус в поле ввода ставим только когда открывает сам клиент.
+    if (!auto) input.focus();
+    if (typeof ym === 'function') ym(111045788, 'reachGoal', auto ? 'ai_manager_auto_open' : 'ai_manager_open');
   }
 
   function closePanel() {
@@ -115,4 +120,12 @@ const AI_MAX_HISTORY = 20;
       input.focus();
     }
   });
+
+  // Автоматически открыть чат через 5 секунд нахождения на сайте — один раз
+  // за вкладку (sessionStorage), чтобы не всплывал повторно при каждом
+  // клике по странице/якорной ссылке, и не открывать, если клиент уже сам
+  // открыл или закрыл чат раньше.
+  window.setTimeout(() => {
+    if (!isOpen && !sessionStorage.getItem(AI_AUTO_OPEN_SESSION_KEY)) openPanel(true);
+  }, AI_AUTO_OPEN_DELAY_MS);
 })();
