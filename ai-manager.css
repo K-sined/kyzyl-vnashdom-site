@@ -88,7 +88,9 @@
   font-size: 0.92rem;
   line-height: 1.4;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
+.ai-chat__msg a { color: inherit; text-decoration: underline; }
 .ai-chat__msg--assistant {
   align-self: flex-start;
   background: #fff;
