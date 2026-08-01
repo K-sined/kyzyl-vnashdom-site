@@ -514,6 +514,15 @@ if (quizOpenBtns.length) {
 
     noteEl.textContent = 'Спасибо! Заявка отправлена, мы свяжемся с вами и учтём скидку 3% по квизу.';
     noteEl.classList.add('is-success');
+    if (typeof ym === 'function') ym(111045788, 'reachGoal', 'quiz_complete');
     window.setTimeout(closeQuiz, 1500);
   });
 }
+
+// Yandex.Metrika goal: клик по любой ссылке "Позвонить" (tel:) — хедер, hero,
+// закрывающий CTA, футер, плавающая кнопка MAX.
+document.querySelectorAll('a[href^="tel:"]').forEach((link) => {
+  link.addEventListener('click', () => {
+    if (typeof ym === 'function') ym(111045788, 'reachGoal', 'call_click');
+  });
+});

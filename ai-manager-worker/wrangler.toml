@@ -1,0 +1,8 @@
+name = "kyzyl-ai-manager"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Секреты (НЕ хранить в этом файле, задаются командой `wrangler secret put`):
+#   ANTHROPIC_API_KEY  — ключ Anthropic API
+#   TELEGRAM_BOT_TOKEN — токен бота для отправки заявок
+#   TELEGRAM_CHAT_ID   — chat_id получателя заявок в Telegram
