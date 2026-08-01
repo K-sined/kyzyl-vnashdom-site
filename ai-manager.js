@@ -1,10 +1,11 @@
-// ИИ-менеджер — плавающий чат-виджет. Общается с Cloudflare Worker'ом,
-// который держит ключ Anthropic и сам решает, когда собрать заявку и
-// отправить её в Telegram (см. ai-manager-worker/src/index.js).
+// Чат-виджет менеджера магазина. Общается с Cloudflare Worker'ом, который
+// держит ключ Anthropic и сам решает, когда собрать заявку или предложить
+// каталог и отправить их в Telegram (см. ai-manager-worker/src/index.js).
+// Клиенту персона не раскрывается как ИИ — представляется просто менеджером.
 const AI_WORKER_URL = 'https://kyzyl-ai-manager.kyzyl.workers.dev/api/chat';
 
 const AI_GREETING =
-  'Здравствуйте! Я ИИ-консультант магазина «В наш дом». Отвечу на вопросы про товары, помогу подобрать материалы или оставить заявку на консультацию.';
+  'Здравствуйте! Я менеджер магазина «В наш дом». Отвечу на вопросы про товары, помогу подобрать материалы или пришлю каталог по интересующей группе товаров.';
 const AI_MAX_HISTORY = 20;
 
 (function initAiManager() {
@@ -22,10 +23,28 @@ const AI_MAX_HISTORY = 20;
   let isOpen = false;
   let isSending = false;
 
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Ссылки на каталоги (Google Drive и т.п.), которые менеджер присылает в
+  // тексте ответа, должны быть кликабельными — экранируем текст целиком,
+  // затем оборачиваем URL-подстроки в <a>, не давая модели вставить
+  // произвольную разметку.
+  function linkify(text) {
+    const escaped = escapeHtml(text);
+    return escaped.replace(/https?:\/\/[^\s<]+/g, (url) => {
+      const clean = url.replace(/[).,]+$/, '');
+      return `<a href="${clean}" target="_blank" rel="noopener">${clean}</a>`;
+    });
+  }
+
   function appendMessage(role, text) {
     const bubble = document.createElement('div');
     bubble.className = `ai-chat__msg ai-chat__msg--${role}`;
-    bubble.textContent = text;
+    bubble.innerHTML = linkify(text);
     messagesEl.appendChild(bubble);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return bubble;
