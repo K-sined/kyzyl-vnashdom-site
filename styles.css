@@ -419,6 +419,13 @@ section { padding: 80px 0; }
   padding: 36px 0;
 }
 
+.promo__link {
+  display: block;
+  border-radius: var(--radius-lg);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth);
+}
+.promo__link:hover, .promo__link:focus-visible { transform: translateY(-4px) scale(1.01); }
+
 .promo__banner {
   display: block;
   width: 100%;
