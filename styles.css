@@ -430,16 +430,9 @@ section { padding: 80px 0; }
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 1920 / 720;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lift);
-}
-
-.promo__actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 24px;
 }
 
 /* Advantages */
