@@ -526,3 +526,97 @@ document.querySelectorAll('a[href^="tel:"]').forEach((link) => {
     if (typeof ym === 'function') ym(111045788, 'reachGoal', 'call_click');
   });
 });
+
+// Promo banner carousel — auto-advances and supports arrow/dot clicks plus
+// touch swipe. Degrades to a plain static banner when there's only one
+// slide (no dots/arrows/autoplay — see .promo-carousel--multi in CSS), so
+// adding future campaign banners later is just pushing more
+// .promo-carousel__slide markup into the track, no JS changes needed.
+(function initPromoCarousel() {
+  const root = document.getElementById('promoCarousel');
+  if (!root) return;
+  const track = root.querySelector('.promo-carousel__track');
+  const slides = Array.from(track.children);
+  if (slides.length < 2) return;
+
+  root.classList.add('promo-carousel--multi');
+
+  const dotsEl = root.querySelector('.promo-carousel__dots');
+  const prevBtn = root.querySelector('.promo-carousel__arrow--prev');
+  const nextBtn = root.querySelector('.promo-carousel__arrow--next');
+  const dots = slides.map((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'promo-carousel__dot';
+    dot.setAttribute('aria-label', `Баннер ${i + 1} из ${slides.length}`);
+    dot.addEventListener('click', () => goTo(i, true));
+    dotsEl.appendChild(dot);
+    return dot;
+  });
+
+  let index = 0;
+  let autoplayTimer = null;
+
+  function render() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+  }
+
+  function goTo(i, userInitiated) {
+    index = (i + slides.length) % slides.length;
+    render();
+    if (userInitiated) restartAutoplay();
+  }
+
+  function next() { goTo(index + 1); }
+  function prev() { goTo(index - 1, true); }
+
+  function startAutoplay() {
+    autoplayTimer = window.setInterval(next, 5000);
+  }
+  function stopAutoplay() {
+    if (autoplayTimer) window.clearInterval(autoplayTimer);
+  }
+  function restartAutoplay() {
+    stopAutoplay();
+    startAutoplay();
+  }
+
+  nextBtn.addEventListener('click', () => goTo(index + 1, true));
+  prevBtn.addEventListener('click', prev);
+  root.addEventListener('mouseenter', stopAutoplay);
+  root.addEventListener('mouseleave', startAutoplay);
+  root.addEventListener('focusin', stopAutoplay);
+  root.addEventListener('focusout', startAutoplay);
+
+  // Touch/pointer swipe — drag the track, snap to nearest slide on release.
+  let dragStartX = null;
+  let dragDeltaX = 0;
+  track.addEventListener('pointerdown', (e) => {
+    dragStartX = e.clientX;
+    track.style.transition = 'none';
+    stopAutoplay();
+  });
+  track.addEventListener('pointermove', (e) => {
+    if (dragStartX === null) return;
+    dragDeltaX = e.clientX - dragStartX;
+    track.style.transform = `translateX(calc(-${index * 100}% + ${dragDeltaX}px))`;
+  });
+  function endDrag() {
+    if (dragStartX === null) return;
+    track.style.transition = '';
+    const threshold = root.clientWidth * 0.15;
+    if (dragDeltaX > threshold) goTo(index - 1);
+    else if (dragDeltaX < -threshold) goTo(index + 1);
+    else render();
+    dragStartX = null;
+    dragDeltaX = 0;
+    startAutoplay();
+  }
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+  track.addEventListener('pointerleave', () => { if (dragStartX !== null) endDrag(); });
+
+  render();
+  startAutoplay();
+})();

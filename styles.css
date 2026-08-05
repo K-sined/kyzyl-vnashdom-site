@@ -411,7 +411,7 @@ section { padding: 80px 0; }
   margin-bottom: 40px;
 }
 
-/* Promo (sale banner) */
+/* Promo (sale banner carousel) */
 
 .promo {
   position: relative;
@@ -419,20 +419,99 @@ section { padding: 80px 0; }
   padding: 36px 0;
 }
 
-.promo__link {
-  display: block;
+.promo-carousel {
+  position: relative;
   border-radius: var(--radius-lg);
-  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
 }
-.promo__link:hover, .promo__link:focus-visible { transform: translateY(-4px) scale(1.01); }
 
-.promo__banner {
+.promo-carousel__track {
+  display: flex;
+  width: 100%;
+  touch-action: pan-y;
+  transition: transform 0.6s var(--ease-smooth);
+}
+
+.promo-carousel__slide {
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+}
+
+.promo-carousel__img {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1920 / 720;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lift);
+  aspect-ratio: 1536 / 1024;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Single-slide state: no interactive chrome, just a plain clickable banner
+   with the same hover lift the old static promo banner had. Multi-slide
+   state (2+ slides pushed into the track later) reveals arrows/dots below
+   and swaps this hover lift for the sliding transition instead. */
+.promo-carousel:not(.promo-carousel--multi) .promo-carousel__slide {
+  transition: transform 0.4s var(--ease-spring);
+}
+.promo-carousel:not(.promo-carousel--multi) .promo-carousel__slide:hover,
+.promo-carousel:not(.promo-carousel--multi) .promo-carousel__slide:focus-visible {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.promo-carousel__arrow {
+  display: none;
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(43, 28, 20, 0.55);
+  color: var(--cream-100);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  transition: background 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth);
+}
+.promo-carousel__arrow:hover { background: rgba(43, 28, 20, 0.8); }
+.promo-carousel__arrow--prev { left: 16px; }
+.promo-carousel__arrow--next { right: 16px; }
+
+.promo-carousel__dots {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  translate: -50% 0;
+  gap: 8px;
+}
+
+.promo-carousel__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(245, 240, 225, 0.55);
+  cursor: pointer;
+  transition: background 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth);
+}
+.promo-carousel__dot.is-active { background: var(--cream-100); transform: scale(1.2); }
+
+.promo-carousel--multi .promo-carousel__arrow,
+.promo-carousel--multi .promo-carousel__dots {
+  display: flex;
+}
+
+@media (max-width: 640px) {
+  .promo-carousel__arrow { width: 36px; height: 36px; font-size: 20px; }
 }
 
 /* Advantages */
