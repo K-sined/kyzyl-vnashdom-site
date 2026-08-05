@@ -585,9 +585,9 @@ document.querySelectorAll('a[href^="tel:"]').forEach((link) => {
   nextBtn.addEventListener('click', () => goTo(index + 1, true));
   prevBtn.addEventListener('click', prev);
   root.addEventListener('mouseenter', stopAutoplay);
-  root.addEventListener('mouseleave', startAutoplay);
+  root.addEventListener('mouseleave', restartAutoplay);
   root.addEventListener('focusin', stopAutoplay);
-  root.addEventListener('focusout', startAutoplay);
+  root.addEventListener('focusout', restartAutoplay);
 
   // Touch/pointer swipe — drag the track, snap to nearest slide on release.
   let dragStartX = null;
