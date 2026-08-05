@@ -45,14 +45,29 @@
     "latitude": 51.708914,
     "longitude": 94.458418
   },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    "opens": "09:00",
-    "closes": "19:00"
-  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Sunday"],
+      "opens": "09:00",
+      "closes": "17:00"
+    }
+  ],
   "paymentAccepted": "Наличные, банковская карта, банковский перевод, СБП",
-  "hasMap": "https://yandex.ru/maps/-/CTf6zI6M"
+  "hasMap": "https://yandex.ru/maps/-/CTf6zI6M",
+  "sameAs": ["https://vk.ru/club240644022", "https://ok.ru/group/70000052841147"]
 }
 </script>
 
@@ -418,7 +433,20 @@
           </li>
           <li>
             <span class="contacts__label">Часы работы</span>
-            <span>Ежедневно, 9:00–19:00</span>
+            <span>Пн–Пт 9:00–19:00, Сб 9:00–18:00, Вс 9:00–17:00</span>
+          </li>
+          <li>
+            <span class="contacts__label">Мы в соцсетях</span>
+            <span class="contacts__social">
+              <a href="https://vk.ru/club240644022" target="_blank" rel="noopener" aria-label="Мы ВКонтакте">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="22" height="22"><path d="M13.9 17.4c-6.8 0-10.7-4.7-10.9-12.4h3.4c.1 5.7 2.6 8.1 4.6 8.6v-8.6h3.2v4.9c2-.2 4-2.4 4.7-4.9h3.2c-.5 3-2.8 5.3-4.4 6.2 1.6.7 4.2 2.7 5.2 6.2h-3.5c-.8-2.4-2.6-4.2-5.2-4.5v4.5h-.4c-.4 0-.6 0-.9 0z"/></svg>
+                <span>ВКонтакте</span>
+              </a>
+              <a href="https://ok.ru/group/70000052841147" target="_blank" rel="noopener" aria-label="Мы в Одноклассниках">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="22" height="22"><circle cx="12" cy="6.5" r="3.2"/><path d="M8.6 12.3c-.6-.6-.6-1.5 0-2 .6-.5 1.5-.5 2 .1a3.2 3.2 0 0 0 4.8 0c.5-.6 1.4-.6 2-.1.6.5.6 1.4 0 2a5.9 5.9 0 0 1-2.7 1.6l2.7 2.7c.6.6.6 1.5 0 2-.5.6-1.4.6-2 0L12 15.2l-3.4 3.4c-.5.6-1.4.6-2 0-.5-.5-.5-1.4 0-2l2.7-2.7a5.9 5.9 0 0 1-2.7-1.6z"/></svg>
+                <span>Одноклассники</span>
+              </a>
+            </span>
           </li>
         </ul>
         <a class="btn btn--accent" target="_blank" rel="noopener"
@@ -443,7 +471,15 @@
 <footer class="footer">
   <div class="container footer__inner">
     <img src="assets/logo.png" alt="В наш дом" class="footer__logo">
-    <p>г. Кызыл, ул. Оюна Курседи, 54 · <a href="tel:+79930334434">+7 (993) 033-44-34</a> · Ежедневно 9:00–19:00</p>
+    <p>г. Кызыл, ул. Оюна Курседи, 54 · <a href="tel:+79930334434">+7 (993) 033-44-34</a> · Пн–Пт 9:00–19:00, Сб 9:00–18:00, Вс 9:00–17:00</p>
+    <div class="footer__social">
+      <a href="https://vk.ru/club240644022" target="_blank" rel="noopener" aria-label="Мы ВКонтакте">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="22" height="22"><path d="M13.9 17.4c-6.8 0-10.7-4.7-10.9-12.4h3.4c.1 5.7 2.6 8.1 4.6 8.6v-8.6h3.2v4.9c2-.2 4-2.4 4.7-4.9h3.2c-.5 3-2.8 5.3-4.4 6.2 1.6.7 4.2 2.7 5.2 6.2h-3.5c-.8-2.4-2.6-4.2-5.2-4.5v4.5h-.4c-.4 0-.6 0-.9 0z"/></svg>
+      </a>
+      <a href="https://ok.ru/group/70000052841147" target="_blank" rel="noopener" aria-label="Мы в Одноклассниках">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="22" height="22"><circle cx="12" cy="6.5" r="3.2"/><path d="M8.6 12.3c-.6-.6-.6-1.5 0-2 .6-.5 1.5-.5 2 .1a3.2 3.2 0 0 0 4.8 0c.5-.6 1.4-.6 2-.1.6.5.6 1.4 0 2a5.9 5.9 0 0 1-2.7 1.6l2.7 2.7c.6.6.6 1.5 0 2-.5.6-1.4.6-2 0L12 15.2l-3.4 3.4c-.5.6-1.4.6-2 0-.5-.5-.5-1.4 0-2l2.7-2.7a5.9 5.9 0 0 1-2.7-1.6z"/></svg>
+      </a>
+    </div>
     <p class="footer__copy">© 2026 «В наш дом». Стройматериалы в Кызыле.</p>
   </div>
 </footer>
