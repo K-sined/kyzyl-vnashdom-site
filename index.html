@@ -92,6 +92,51 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
+  "@type": "HardwareStore",
+  "name": "В наш дом",
+  "image": "https://kyzyl.vnashdom.ru/assets/showroom.webp",
+  "url": "https://kyzyl.vnashdom.ru/",
+  "telephone": "+7-923-383-44-34",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Магистральная, 24",
+    "addressLocality": "Кызыл",
+    "addressRegion": "Республика Тыва",
+    "addressCountry": "RU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 51.703578,
+    "longitude": 94.443057
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Sunday"],
+      "opens": "09:00",
+      "closes": "17:00"
+    }
+  ],
+  "paymentAccepted": "Наличные, банковская карта, банковский перевод, СБП",
+  "sameAs": ["https://vk.ru/club240644022", "https://ok.ru/group/70000052841147"]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
@@ -501,9 +546,10 @@
   <section class="cta">
     <div class="container cta__inner reveal">
       <h2>Приезжайте — подберём материалы вместе</h2>
-      <p>Ждём вас ежедневно с 9:00 до 19:00 по адресу ул. Оюна Курседи, 54 в Кызыле.</p>
+      <p>Ждём вас в двух магазинах в Кызыле: на ул. Оюна Курседи, 54 и на ул. Магистральной, 24.</p>
       <div class="cta__actions">
-        <a href="tel:+79930334434" class="btn btn--light btn--lg">Позвонить: +7 (993) 033-44-34</a>
+        <a href="tel:+79930334434" class="btn btn--light btn--lg">Оюна Курседи: +7 (993) 033-44-34</a>
+        <a href="tel:+79233834434" class="btn btn--light btn--lg">Магистральная: +7 (923) 383-44-34</a>
         <button type="button" class="btn btn--outline-light btn--lg js-open-quiz">Подобрать материалы</button>
       </div>
     </div>
@@ -516,7 +562,7 @@
     <div class="container">
       <div class="contacts__about reveal">
         <p class="contacts__about-eyebrow">О нас</p>
-        <p class="contacts__about-text">«В наш дом» — магазин стройматериалов на ул. Оюна Курседи, 54 в Кызыле. Держим на складе основной ассортимент для ремонта — от входных дверей до герметиков, — чтобы не заставлять покупателя ждать заказ. Перед покупкой поможем рассчитать нужное количество материала и подберём вариант под ваш бюджет.</p>
+        <p class="contacts__about-text">«В наш дом» — сеть магазинов стройматериалов в Кызыле: на ул. Оюна Курседи, 54 и на ул. Магистральной, 24. Держим на складе основной ассортимент для ремонта — от входных дверей до герметиков, — чтобы не заставлять покупателя ждать заказ. Перед покупкой поможем рассчитать нужное количество материала и подберём вариант под ваш бюджет.</p>
         <ul class="perks">
           <li class="perks__item">
             <span class="perks__icon">
@@ -550,16 +596,24 @@
         <h2 class="section-title">Контакты</h2>
         <ul class="contacts__list">
           <li>
-            <span class="contacts__label">Адрес</span>
+            <span class="contacts__label">Адрес (магазин 1)</span>
             <span>г. Кызыл, ул. Оюна Курседи, 54</span>
           </li>
           <li>
-            <span class="contacts__label">Телефон</span>
+            <span class="contacts__label">Телефон (магазин 1)</span>
             <a href="tel:+79930334434">+7 (993) 033-44-34</a>
           </li>
           <li>
+            <span class="contacts__label">Адрес (магазин 2)</span>
+            <span>г. Кызыл, ул. Магистральная, 24</span>
+          </li>
+          <li>
+            <span class="contacts__label">Телефон (магазин 2)</span>
+            <a href="tel:+79233834434">+7 (923) 383-44-34</a>
+          </li>
+          <li>
             <span class="contacts__label">Часы работы</span>
-            <span>Пн–Пт 9:00–19:00, Сб 9:00–18:00, Вс 9:00–17:00</span>
+            <span>Пн–Пт 9:00–19:00, Сб 9:00–18:00, Вс 9:00–17:00 (оба магазина)</span>
           </li>
           <li>
             <span class="contacts__label">Мы в соцсетях</span>
@@ -577,7 +631,11 @@
         </ul>
         <a class="btn btn--accent" target="_blank" rel="noopener"
            href="https://yandex.ru/maps/?text=Кызыл%2C%20улица%20Оюна%20Курседи%2C%2054">
-          Построить маршрут
+          Маршрут: Оюна Курседи, 54
+        </a>
+        <a class="btn btn--accent" target="_blank" rel="noopener"
+           href="https://yandex.ru/maps/?text=Кызыл%2C%20улица%20Магистральная%2C%2024">
+          Маршрут: Магистральная, 24
         </a>
       </div>
       <div class="contacts__map reveal">
@@ -597,7 +655,9 @@
 <footer class="footer">
   <div class="container footer__inner">
     <img src="assets/logo.png" alt="В наш дом" class="footer__logo">
-    <p>г. Кызыл, ул. Оюна Курседи, 54 · <a href="tel:+79930334434">+7 (993) 033-44-34</a> · Пн–Пт 9:00–19:00, Сб 9:00–18:00, Вс 9:00–17:00</p>
+    <p>г. Кызыл, ул. Оюна Курседи, 54 · <a href="tel:+79930334434">+7 (993) 033-44-34</a></p>
+    <p>г. Кызыл, ул. Магистральная, 24 · <a href="tel:+79233834434">+7 (923) 383-44-34</a></p>
+    <p>Пн–Пт 9:00–19:00, Сб 9:00–18:00, Вс 9:00–17:00 (оба магазина)</p>
     <div class="footer__social">
       <a href="https://vk.ru/club240644022" target="_blank" rel="noopener" aria-label="Мы ВКонтакте">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="22" height="22"><path d="M13.9 17.4c-6.8 0-10.7-4.7-10.9-12.4h3.4c.1 5.7 2.6 8.1 4.6 8.6v-8.6h3.2v4.9c2-.2 4-2.4 4.7-4.9h3.2c-.5 3-2.8 5.3-4.4 6.2 1.6.7 4.2 2.7 5.2 6.2h-3.5c-.8-2.4-2.6-4.2-5.2-4.5v4.5h-.4c-.4 0-.6 0-.9 0z"/></svg>
