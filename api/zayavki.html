@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Заявки с квиза — В наш дом</title>
+<style>
+  :root { --brown: #3b2417; --cream: #fbf5ec; --accent: #c8452c; --muted: #7a6a5e; --line: #e6dccf; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--cream); color: var(--brown); }
+  header { background: var(--brown); color: #fff; padding: 16px; }
+  header h1 { margin: 0; font-size: 20px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  input { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; width: 100%; max-width: 280px; }
+  button { font: inherit; padding: 8px 14px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; }
+  button.light { background: #efe6da; color: var(--brown); }
+  .muted { color: var(--muted); font-size: 13px; }
+  .err { color: var(--accent); }
+  .wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; color: var(--muted); }
+  .hidden { display: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+</style>
+</head>
+<body>
+<header><h1>Заявки с квиза «Подобрать материалы»</h1></header>
+<main>
+  <div class="card" id="login">
+    <p>Код доступа</p>
+    <div class="row"><input type="password" id="token"><button id="loginBtn">Войти</button></div>
+    <p class="err" id="loginErr"></p>
+  </div>
+  <div id="app" class="hidden">
+    <div class="card row">
+      <button class="light" id="reload">Обновить</button>
+      <button class="light" id="csv">Скачать CSV</button>
+      <button class="light" id="logout">Выйти</button>
+      <span class="muted" id="count"></span>
+    </div>
+    <div class="card wrap"><div id="list">Загрузка…</div></div>
+    <p class="muted">Заявки старше 12 месяцев удаляются автоматически (так написано в политике обработки данных). Если клиент просит удалить свои данные — кнопка «Удалить» в строке. Файл CSV храните только на рабочем компьютере.</p>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const KEY = 'site_leads_token';
+const getT = () => { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
+const setT = t => { try { localStorage.setItem(KEY, t); } catch (e) {} };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let rows = [];
+
+async function api(action, extra = {}) {
+  const res = await fetch('lead.php', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Api-Token': getT() },
+    body: JSON.stringify({ action, ...extra }),
+  });
+  const data = await res.json().catch(() => ({ ok: false, error: 'Сервер ответил с ошибкой' }));
+  if (!data.ok) throw new Error(data.error || 'Ошибка');
+  return data;
+}
+async function load() {
+  try {
+    rows = (await api('list')).rows;
+    $('login').classList.add('hidden'); $('app').classList.remove('hidden');
+    $('count').textContent = 'Заявок: ' + rows.length;
+    $('list').innerHTML = rows.length
+      ? '<table><tr><th>Когда</th><th>Имя</th><th>Телефон</th><th>Помещение</th><th>Материалы</th><th>Сроки</th><th>Расчёт</th><th></th></tr>' +
+        rows.map(r => `<tr><td>${esc(r.created_at.slice(0, 16))}</td><td>${esc(r.name)}</td><td><a href="tel:${esc(r.phone)}">${esc(r.phone)}</a></td><td>${esc(r.room)}</td><td>${esc(r.materials)}</td><td>${esc(r.timing)}</td><td>${esc(r.need_calc)}</td><td><button class="light" data-del="${r.id}">Удалить</button></td></tr>`).join('') + '</table>'
+      : 'Заявок пока нет.';
+  } catch (e) {
+    $('app').classList.add('hidden'); $('login').classList.remove('hidden');
+    if (getT()) $('loginErr').textContent = e.message;
+  }
+}
+$('loginBtn').onclick = () => { setT($('token').value.trim()); load(); };
+$('reload').onclick = load;
+$('logout').onclick = () => { setT(''); location.reload(); };
+$('list').onclick = async e => {
+  const id = e.target.dataset.del;
+  if (!id || !confirm('Удалить заявку насовсем?')) return;
+  try { await api('delete', { id: Number(id) }); load(); } catch (err) { alert(err.message); }
+};
+$('csv').onclick = () => {
+  const head = ['Дата', 'Имя', 'Телефон', 'Помещение', 'Материалы', 'Сроки', 'Расчёт'];
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const lines = [head.map(q).join(';')].concat(rows.map(r => [r.created_at, r.name, r.phone, r.room, r.materials, r.timing, r.need_calc].map(q).join(';')));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'zayavki-kviz.csv'; a.click();
+};
+load();
+</script>
+</body>
+</html>

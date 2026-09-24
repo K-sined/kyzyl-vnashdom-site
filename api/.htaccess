@@ -1,0 +1,4 @@
+# Служебные файлы не отдаём наружу
+<FilesMatch "^(config\.php|config\.sample\.php|schema\.sql|README\.md)$">
+  Require all denied
+</FilesMatch>

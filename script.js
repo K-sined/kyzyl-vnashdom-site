@@ -352,17 +352,16 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
   mapLoadObserver.observe(mapContainer);
 }
 
-// Google Sheets webhook for quiz leads (name, phone, answers) — a Google Apps
-// Script Web App deployed from the store's own Google account (sheet "Заявки
-// с квиза"), since GitHub Pages has no backend. Redeploy notes live in the
-// Apps Script project itself if this ever needs to be recreated.
-const GOOGLE_SHEETS_QUIZ_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyUXmwrpc8So3GobywnlGBb_ii-3j6qnuTco3t_Ta8xlVgu8Y13bHrrAwJNF9hCBtXXdQ/exec';
+// Quiz leads (name, phone, answers) go to our own PHP endpoint on reg.ru
+// (api/lead.php, MySQL in Russia). Both mirrors — reg.ru and GitHub Pages —
+// post to this absolute URL; CORS is allowed for both in lead.php. Leads used
+// to go to Google Sheets, which broke the 152-ФЗ data-localization rule —
+// don't route personal data to foreign services again.
+const QUIZ_LEAD_ENDPOINT = 'https://kyzyl.vnashdom.ru/api/lead.php';
 
 // "Подобрать материалы" quiz (hero + repeated in the closing CTA section) —
 // a short guided flow (room → materials → timing → needs-calc → contact)
-// that logs the lead to Google Sheets (see webhook above), then opens
-// Telegram with the message pre-filled, since there's no backend on a
-// static site.
+// that saves the lead via the endpoint above.
 const quizOpenBtns = document.querySelectorAll('.js-open-quiz');
 if (quizOpenBtns.length) {
   const backdrop = document.getElementById('quizBackdrop');
@@ -489,11 +488,12 @@ if (quizOpenBtns.length) {
     btn.addEventListener('click', () => showStep(Number(btn.dataset.goto)));
   });
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('quizName').value.trim();
     const phone = document.getElementById('quizPhone').value.trim();
     const digits = phone.replace(/\D/g, '');
+    const submitBtn = form.querySelector('button[type="submit"]');
 
     noteEl.classList.remove('is-error', 'is-success');
     if (!name || digits.length < 10) {
@@ -501,23 +501,38 @@ if (quizOpenBtns.length) {
       noteEl.classList.add('is-error');
       return;
     }
+    if (!document.getElementById('quizConsent').checked) {
+      noteEl.textContent = 'Отметьте согласие на обработку персональных данных.';
+      noteEl.classList.add('is-error');
+      return;
+    }
 
     const { roomText, materialsText, timingText, needCalcText } = buildSummary();
 
-    if (GOOGLE_SHEETS_QUIZ_WEBHOOK) {
-      // Fire-and-forget: Apps Script Web Apps don't send CORS headers back,
-      // so the response is opaque under no-cors — that's fine, we don't
-      // need to read it, only to make sure the row lands in the sheet.
-      fetch(GOOGLE_SHEETS_QUIZ_WEBHOOK, {
+    // Unlike the old fire-and-forget webhook, we wait for the answer: if the
+    // lead didn't save, the customer must know and call instead.
+    submitBtn.disabled = true;
+    noteEl.textContent = 'Отправляем…';
+    try {
+      const resp = await fetch(QUIZ_LEAD_ENDPOINT, {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({
-          name, phone,
+          action: 'submit', name, phone, consent_pd: true,
+          website: document.getElementById('quizWebsite').value,
           room: roomText, materials: materialsText, timing: timingText, needCalc: needCalcText,
+          source: location.hostname,
         }),
-      }).catch(() => {});
+      });
+      const data = await resp.json();
+      if (!data.ok) throw new Error(data.error);
+    } catch (err) {
+      noteEl.textContent = 'Не удалось отправить заявку. Позвоните нам: +7 (993) 033-44-34 или +7 (923) 383-44-34.';
+      noteEl.classList.add('is-error');
+      submitBtn.disabled = false;
+      return;
     }
+    submitBtn.disabled = false;
 
     noteEl.textContent = 'Спасибо! Заявка отправлена, мы свяжемся с вами и учтём скидку 3% по квизу.';
     noteEl.classList.add('is-success');
