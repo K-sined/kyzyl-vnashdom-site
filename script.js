@@ -306,7 +306,6 @@ if (catalogGrid) {
 // hand-tuned against Yandex's own "В наш дом" business pin on their map.
 const YANDEX_MAPS_API_KEY = 'ed2991cb-a0a1-45a8-a39c-59338261e975';
 const SHOP_COORDS = [51.708914, 94.458418];
-const SHOP2_COORDS = [51.703578, 94.443057];
 const mapContainer = document.getElementById('yandexMap');
 if (mapContainer && YANDEX_MAPS_API_KEY) {
   // Loaded lazily (only once the contacts section nears the viewport) so
@@ -322,21 +321,15 @@ if (mapContainer && YANDEX_MAPS_API_KEY) {
       window.ymaps.ready(() => {
         const map = new window.ymaps.Map('yandexMap', {
           center: SHOP_COORDS,
-          zoom: 13,
+          zoom: 16,
           controls: ['zoomControl'],
         });
         map.behaviors.disable('scrollZoom');
         const placemark = new window.ymaps.Placemark(SHOP_COORDS, {
-          hintContent: 'В наш дом — Оюна Курседи, 54',
+          hintContent: 'В наш дом',
           balloonContent: 'г. Кызыл, ул. Оюна Курседи, 54',
         }, { preset: 'islands#redDotIcon' });
-        const placemark2 = new window.ymaps.Placemark(SHOP2_COORDS, {
-          hintContent: 'В наш дом — Магистральная, 24',
-          balloonContent: 'г. Кызыл, ул. Магистральная, 24',
-        }, { preset: 'islands#redDotIcon' });
         map.geoObjects.add(placemark);
-        map.geoObjects.add(placemark2);
-        map.setBounds(map.geoObjects.getBounds(), { checkZoomRange: true, zoomMargin: 40 });
         mapContainer.closest('.contacts__map').classList.add('is-ready');
       });
     };
@@ -527,7 +520,7 @@ if (quizOpenBtns.length) {
       const data = await resp.json();
       if (!data.ok) throw new Error(data.error);
     } catch (err) {
-      noteEl.textContent = 'Не удалось отправить заявку. Позвоните нам: +7 (993) 033-44-34 или +7 (923) 383-44-34.';
+      noteEl.textContent = 'Не удалось отправить заявку. Позвоните нам: +7 (993) 033-44-34.';
       noteEl.classList.add('is-error');
       submitBtn.disabled = false;
       return;
